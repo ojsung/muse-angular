@@ -1,0 +1,22 @@
+<div class='card'>
+  <div class='card-header' style="background-color:rgb(216, 101, 101)">
+    {{pageTitle}}
+  </div>
+  <div class='card-body'>
+    <div class='table-responsive'>
+      <table class='respond'>
+        <thead>
+          <tr>
+            <th>Username</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let user of users'>
+            <td>{{user.userName}}</td>
+          </tr>
+          <div style="height:50vh"></div>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

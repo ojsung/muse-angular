@@ -1,0 +1,44 @@
+<div>
+  <div class="row">
+    <div class="col-md-11">
+      <h2>{{disaster?.site}} </h2>
+      <h3>This page doesn't work yet</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <table class='respond' *ngIf='disaster.device && disaster.device!="SW.HU"'>
+        <thead>
+          <tr>
+            <th>Downstream Outages</th>
+            <th>Site Name</th>
+            <th>Time Down</th>
+            <th>osTicket</th>
+            <th>Issue Label</th>
+            <th>Summary</th>
+            <th>Maintenance ETA</th>
+            <th>Customer Count</th>
+            <th>Acknowledgment</th>
+          </tr>
+        </thead>
+        <thead>
+          <tr *ngFor='let child of children'>
+            <div></div>
+            <td><a [routerLink]="['/disaster', disaster.id]">{{child.site}}</a></td>
+            <td>{{child.timeDown}}</td>
+            <td>{{child.osTicket}}</td>
+            <td>{{child.issueLabel}}</td>
+            <td><button class='button'>Summary
+                <span class="tooltiptext">{{disaster.outageSummary}}</span></button></td>
+            <td>{{disaster.maintenanceETA}}</td>
+            <td>{{disaster.customerCount}}</td>
+            <td><button class='button'>NOC Message
+                <span class="tooltiptext">{{disaster.acknowledgement}}</span>
+              </button></td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>

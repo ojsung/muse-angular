@@ -1,0 +1,41 @@
+[
+	{
+		"siteName": "UT.WEJ.M0014",
+		"parent": "I am a parent",
+		"device": "SWHU905",
+		"timeDown": "2/20/2019 15:30",
+		"osTicket": "INC005235",
+		"issueLabel": "is DOWN",
+		"outageSummary": "Site is down, we expect the site to be back online in 30m",
+		"maintenanceETA": "16:00",
+		"customerCount": 5,
+		"acknowledgement": "Power outage, waiting on Net Maint",
+		"isDown": false
+	},
+	{
+		"siteName": "UT.WEJ.M0014",
+		"parent": "I am a parent",
+		"device": "SWHU905",
+		"timeDown": "2/20/2019 15:30",
+		"osTicket": "INC005235",
+		"issueLabel": "is DOWN",
+		"outageSummary": "Site is down, we expect the site to be back online in 30m",
+		"maintenanceETA": "16:00",
+		"customerCount": 5,
+		"acknowledgement": "Power outage, waiting on Net Maint",
+		"isDown": false
+	},
+	{
+		"siteName": "UT.WEJ.M0014",
+		"parent": "I am a parent",
+		"device": "SWHU905",
+		"timeDown": "2/20/2019 15:30",
+		"osTicket": "INC005235",
+		"issueLabel": "is DOWN",
+		"outageSummary": "Site is down, we expect the site to be back online in 30m",
+		"maintenanceETA": "16:00",
+		"customerCount": 5,
+		"acknowledgement": "Power outage, waiting on Net Maint",
+		"isDown": false
+	}
+]

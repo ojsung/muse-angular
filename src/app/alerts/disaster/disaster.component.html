@@ -1,0 +1,100 @@
+<div class="card">
+  <div class="card-header" style="background-color:rgb(216, 101, 101)">
+    {{ pageTitle }}
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-1">Filter By:</div>
+      <div class="col-md-1">
+        <input type="text" [(ngModel)]="listFilter" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">
+        <h4>Filtered By: {{ listFilter }}</h4>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="respond" *ngIf="retrievedDisasters && retrievedDisasters.length">
+        <thead>
+          <tr>
+            <th class="diz">Site Name</th>
+            <th class="diz">Time Down</th>
+            <th class="diz">osTicket</th>
+            <th class="diz">Issue Label</th>
+            <th class="diz">Summary</th>
+            <th class="diz">Maintenance ETA</th>
+            <th class="diz">Customer Count</th>
+            <th class="diz">Acknowledgment</th>
+            <th class="diz">Script</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let obj of displayedArray; let i = index" colspan="9">
+            <tr>
+              <th colspan="9" (click)="expandRow(i)">
+                <i
+                  style="margin-right: 2px"
+                  class="fa fa-plus-square-o"
+                  *ngIf="i != expandedIndex"
+                ></i>
+                <i
+                  style="margin-right: 2px"
+                  class="fa fa-minus-square"
+                  *ngIf="i === expandedIndex"
+                ></i>
+                {{ obj[0] }}
+              </th>
+            </tr>
+            <tr *ngIf="i === expandedIndex">
+              <td colspan="9">
+                <table>
+                  <tr *ngFor="let disaster of obj[1]">
+                    <td class="diz">
+                      <a [routerLink]="['/disaster', disaster._id]">{{ disaster.site }}</a>
+                    </td>
+                    <td class="diz">{{ disaster.timeDown | date: 'M/d/y, HH:mm' }}</td>
+                    <td class="diz">{{ disaster.osTicket }}</td>
+                    <td class="diz">{{ disaster.issueLabel }}</td>
+                    <td class="diz">
+                      <button class="button biz">
+                        Summary <span class="tooltiptext">{{ disaster.outageSummary }}</span>
+                      </button>
+                    </td>
+                    <td class="diz">{{ disaster.maintenanceETA }}</td>
+                    <td class="diz">{{ disaster.customerCount }}</td>
+                    <td class="diz">
+                      <button class="button biz">
+                        Message
+                        <span class="tooltiptext">{{ disaster.acknowledgement }}</span>
+                      </button>
+                    </td>
+                    <td class="diz" *ngIf="this.authorized">
+                      <button class="button biz" (click)="this.removeAlert(disaster)">
+                        Remove
+                      </button>
+                    </td>
+                    <td class="diz" *ngIf="!this.authorized">
+                      <button class="button biz">
+                        Script
+                        <span class="tooltiptext"
+                          >There is currently a small-scale outage affecting your home. We apologize
+                          for the inconvenience. Our technicians are on-site and internet will
+                          return shortly.</span
+                        >
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+          <div style="height:50vh"></div>
+        </tbody>
+      </table>
+      <div class="card-body" *ngIf="!retrievedDisasters || !retrievedDisasters.length">
+        No Alerts to Display (Auto-refreshes Every 15s)
+      </div>
+    </div>
+  </div>
+</div>

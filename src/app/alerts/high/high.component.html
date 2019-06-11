@@ -1,0 +1,108 @@
+<div class="card">
+  <div class="card-header" style="background-color:rgb(238, 140, 101)">
+    {{ pageTitle }}
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="respond">
+        <thead>
+          <tr>
+            <th class="diz">Site Name</th>
+            <th class="diz">Time Reported</th>
+            <th class="diz">osTicket</th>
+            <th class="diz">Device</th>
+            <th class="diz">Issue Label</th>
+            <th class="diz">Summary</th>
+            <th class="diz">Customer Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="7">Active Alerts</th>
+          </tr>
+          <ng-container *ngFor="let obj of highActive; let i = index">
+            <tr>
+              <td>
+                <button
+                  (click)="this.removeProblem(obj)"
+                  *ngIf="this.authorized"
+                  style="margin:5px"
+                  class="btn btn-danger"
+                >
+                  <i class="far fa-times-circle"></i></button
+                >{{ obj.site }}
+              </td>
+              <td>{{ obj.time | date: 'medium' }}</td>
+              <td>{{ obj.osTicket }}</td>
+              <td>{{ obj.device }}</td>
+              <td>{{ obj.issue }}</td>
+              <td>{{ obj.summary }}</td>
+              <td>
+                {{ obj.customerCount }}
+                <button class="btn btn-info" (click)="editProblem(obj)">Edit</button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="!highActive || !highActive.length">
+            <td colspan="7">No Alerts to Display (Auto-refreshes Every 15s)</td>
+          </tr>
+          <tr>
+            <th colspan="7" (click)="this.toggleInactives()"><i
+              style="margin-right: 2px"
+              class="fa fa-plus-square-o"
+              *ngIf="!inactiveToggle"
+            ></i>
+            <i
+              style="margin-right: 2px"
+              class="fa fa-minus-square"
+              *ngIf="inactiveToggle"
+            ></i>
+            Inactive Alerts</th>
+          </tr>
+          <ng-container *ngIf="this.inactiveToggle">
+            <ng-container *ngFor="let obj of highInactive; let i = index" colspan="7">
+              <tr>
+                <td>
+                  <button
+                    (click)="this.addProblem(obj)"
+                    *ngIf="this.authorized"
+                    class="btn btn-success"
+                    style="margin:5px"
+                  >
+                    <i class="far fa-check-circle"></i></button
+                  >{{ obj.site }}
+                </td>
+                <td>{{ obj.time | date: 'medium' }}</td>
+                <td>{{ obj.osTicket }}</td>
+                <td>{{ obj.device }}</td>
+                <td>{{ obj.issue }}</td>
+                <td>{{ obj.summary }}</td>
+                <td>{{ obj.customerCount }}</td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+      <div *ngIf="this.authorized" class="card-body">
+        <button
+          class="btn btn-info"
+          (click)="this.toggleView()"
+          style="min-height: 40px; min-width: 100px"
+        >
+          <span *ngIf="!this.viewToggle">Add a New Alert</span>
+          <span *ngIf="this.viewToggle">Close</span>
+        </button>
+        <div *ngIf="this.viewToggle" class="card-body">
+          <div class="card-body">
+            <button class="btn btn-link">
+              <a *ngIf="this.authorized" class="nav-link" [routerLink]="['../highform']"
+                >Go to Page</a
+              >
+            </button>
+            <cher-high-form [high]="high"></cher-high-form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

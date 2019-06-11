@@ -1,0 +1,156 @@
+<div class="card">
+  <div class="card-header" style="background-color:rgb(238, 140, 101)">
+    Add an Alert
+  </div>
+
+  <div class="card-body">
+    <form novalidate (ngSubmit)="save()" [formGroup]="highForm">
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="siteId">Site Name</label>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="siteId"
+            type="text"
+            placeholder="Site Name (required)"
+            formControlName="site"
+            [ngClass]="{ 'is-invalid': this.siteControl.touched && siteMessage.str }"
+          />
+          <span class="invalid-feedback">
+            {{ siteMessage.str }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="timeId">Time Reported</label>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="timeId"
+            type="datetime-local"
+            placeholder="Time Reported (required)"
+            formControlName="time"
+            [ngClass]="{ 'is-invalid': this.timeControl.touched && timeMessage.str }"
+          />
+          <span class="invalid-feedback">
+            {{ timeMessage.str }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="osTicketId">osTicket</label>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="osTicketId"
+            type="text"
+            placeholder="osTicket (if available)"
+            formControlName="osTicket"
+            [ngClass]="{ 'is-invalid': this.osTicketControl.touched && osTicketMessage.str }"
+          />
+          <span class="invalid-feedback">
+            {{ osTicketMessage.str }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="deviceId">Device</label>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="deviceId"
+            type="text"
+            placeholder="Device (required)"
+            formControlName="device"
+            [ngClass]="{ 'is-invalid': this.deviceControl.touched && deviceMessage.str }"
+          />
+          <span class="invalid-feedback">
+            {{ deviceMessage.str }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="issueId">Issue Label</label>
+        <div class="col-md-8">
+          <select
+            name="Issue"
+            class="form-control"
+            id="issueId"
+            type="text"
+            placeholder="Issue (required)"
+            formControlName="issue"
+            [ngClass]="{ 'is-invalid': this.issueControl.touched && issueMessage.str }"
+          >
+            <option value="Demodulation">Demodulation </option>
+            <option value="Overloaded">Overloaded</option>
+            <option value="Other">Other</option>
+          </select>
+          <span class="invalid-feedback">
+            {{ issueMessage.str }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="summaryId">Summary</label>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="summaryId"
+            type="text"
+            placeholder="Summary ({{ summaryPlaceholder }})"
+            formControlName="summary"
+            [ngClass]="{ 'is-invalid': !this.summaryControl.valid }"
+          />
+          <span class="invalid-feedback">
+            {{ summaryMessage.str }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="customerCountId">Customer Count</label>
+        <div class="col-md-8">
+          <input
+            class="form-control"
+            id="customerCountId"
+            type="number"
+            placeholder="Customer Count (required)"
+            formControlName="customerCount"
+            [ngClass]="{
+              'is-invalid': this.customerCountControl.touched && customerCountMessage.str
+            }"
+          />
+          <span class="invalid-feedback">
+            {{ customerCountMessage.str }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <div class="offset-md-2 col-md-4">
+          <button
+            class="btn btn-primary mr-3"
+            type="submit"
+            style="width:80px"
+            [title]="
+              highForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'
+            "
+            [disabled]="!highForm.valid"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<br />
+<!-- {{ highForm.value | json }} -->
+<!-- <br />Dirty: {{ highForm.dirty }} <br />Touched: {{ highForm.touched }} <br />Valid:
+{{ highForm.valid }} <br />Errors: {{ highForm.errors | json }} <br />Value:
+{{ highForm.value | json }} -->
