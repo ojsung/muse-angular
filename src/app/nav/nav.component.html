@@ -1,8 +1,23 @@
-<nav class='navbar navbar-expand navbar-light bg-light'>
-  <div class='row' style="margin-left:5px; text-align: center"><a class='navbar-brand' [routerLink]="['/welcome']">{{pageTitle}}</a>
-    <a class='nav-link' [routerLink]="['/disaster']">Disaster</a>
-    <a class='nav-link' [routerLink]="['/high']">High</a>
-    <a *ngIf="!auth.isAuthenticated()" class='nav-link' style='display: inline-block' [routerLink]="['user/login']">Login</a>
-    <a *ngIf="auth.isAuthenticated()" (click)="logOut()" class='nav-link' style='display: inline-block' [routerLink]="['user/login']">Logout</a>
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+  <div class="row" style="margin-left:5px; text-align: center">
+    <a class="navbar-brand"  [routerLink]="['/welcome']">{{ pageTitle }}</a>
+    <a class="nav-link" [routerLink]="['/disaster']">Disaster</a>
+    <a class="nav-link" [routerLink]="['/high']">High</a>
+    <a class="nav-link" [routerLink]="['/hani']">Hani</a>
+    <a
+      *ngIf="!auth.isAuthenticated()"
+      class="nav-link"
+      style="display: inline-block"
+      [routerLink]="['user/login']"
+      >Login</a
+    >
+    <a
+      *ngIf="auth.isAuthenticated()"
+      (click)="logOut()"
+      class="nav-link"
+      style="display: inline-block"
+      [routerLink]="['user/login']"
+      >Logout</a
+    >
   </div>
 </nav>

@@ -1,3 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~font-awesome/css/font-awesome.min.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import '~w3-css/w3.css';
+
+.rowflex {
+  display: flex; /*added*/
+  flex-direction: row; /*added*/
+}
+
+.columnflex {
+  display: flex; /*added*/
+  flex-direction: column; /*added*/
+}
+
+.importance {
+  position:fixed!important;
+}
+
+
+
+.enborder {
+  border: 1px solid #ECF0F1;
+}

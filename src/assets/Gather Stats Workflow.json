@@ -1,0 +1,133 @@
+{
+  "begin": ["Q", 1, null],
+  "steps": [
+    {
+      "step": ["Q", 1, null],
+      "label": "Is this a tumbler issue?",
+      "infoData": {
+        "learnMore": "Link for tumbler page in wiki",
+        "why": "We check to see if this is a recurring issue to identify the severity of the issue",
+        "what": "Check in Salesforce for any recent cases (within the last 4 months)",
+        "disposition": [[0, "Troubleshooting"], [1, null], [2, null], [3, null], [4, null]],
+        "autoText": null
+      },
+      "options": [["Yes", [null, 1, null]], ["No", [null, 2, null]]]
+    },
+    {
+      "step": [null, 1, null],
+      "label": "Initiate a chat with QRF to help with the tumber, then continue",
+      "infoData": {
+        "learnMore": "Link for QRF",
+        "why": "At this point, we need to find whether the issue needs to be immediately escalated, or if there are underlying issues that need to be resolved first.",
+        "what": {
+          "Customer ID": 0,
+          "Workflow": "Gather Stats Workflow",
+          "Where you are in the Workflow": "1",
+          "Radio/AP Info": null,
+          "AP Device Name": null,
+          "AP IP": null,
+          "CPE MAC": null,
+          "CPE IP": null,
+          "Question": "Looking through this customer's account, I found that this customer has recent, previous cases on their account. They may be considered a tumbler. I notified QRF and continued troubleshooting.  "
+        },
+        "disposition": [[0, "Troubleshooting"], [1, "CPE"], [2, null], [3, null], [4, null]],
+        "autoText": "they had called in within the last three months.  I contacted QRF to ask how to proceed.  QRF said "
+      },
+      "options": [["Move on", [null, 2, null]]]
+    },
+    {
+      "step": [null, 2, null],
+      "label": "Check the hardware ID in WCore",
+      "infoData": {
+        "learnMore": "link to CPE types",
+        "why": "There are three types of CPEs.  While there are uses for 1410s in situations of LoS, we can see firmware issues with them.  We prefer to install 1420 radios on a customer's home.",
+        "what": CPE["get_bootval vivint_hw_id"],
+        "disposition": [[0, "Troubleshooting"], [1, "CPE"], [2, null], [3, null], [4, null]],
+        "autoText": "Looking in the CPE's stats, I found the customer had a"
+      },
+      "options": [["1410/1411", ["R", 1, null]], ["1420", [null, 3, null]]]
+    },
+    {
+      "step": ["R", 1, null],
+      "label": "Request a tech from QRF to replace the 1410/1411",
+      "infoData": {
+        "learnMore": null,
+        "why": "We are making a push to replace 1410/1411 radios in the field",
+        "what": {
+          "Customer ID": 0,
+          "Workflow": "Gather Stats Workflow",
+          "Where you are in the Workflow": "R1",
+          "Radio/AP Info": null,
+          "AP Device Name": null,
+          "AP IP": null,
+          "CPE MAC": null,
+          "CPE IP": null,
+          "Question": "Customer has a 1410/1411 radio.  Can we send a technician to replace it?"
+        },
+        "disposition": [
+          [0, "Troubleshooting"],
+          [1, "CPE"],
+          [2, "Firmware-CPE"],
+          [3, "Out-of-date"],
+          [4, "Service call"]
+        ],
+        "autoText": "n outdated radio.  I spoke with QRF to replace the radio. "
+      },
+      "options": [["Move on", [null, 3, null]]]
+    },
+    {
+      "step": [null, 3, null],
+      "label": "Check the association table in the AP",
+      "infoData": {
+        "learnMore": "link to info about the command",
+        "why": "explanation of why we're doing this",
+        "what": ap.show_assoc_table,
+        "disposition": [
+          [0, "Troubleshooting"],
+          [1, "CPE"],
+          [2, "Poor Signal"],
+          [3, null],
+          [4, null]
+        ],
+        "autoText": "I checked the customer's AP's association table."
+      },
+      "options": [["Move on", ["Q", 2, null]]]
+    },
+    {
+      "step": ["Q", 2, null],
+      "label": "Is the Customer's CPE associated?",
+      "infoData": {
+        "learnMore": "http://10.252.245.76/vardoc/drupal-project/web/node/174",
+        "why": "A common cause of \"No Internet\" issues is a disconnection of the CPE from the AP.",
+        "what": ap.show_assoc_table,
+        "disposition": [
+          [0, "Troubleshooting"],
+          [1, "CPE"],
+          [2, "Radio Errors"],
+          [3, "Disassociations"],
+          [4, "CPE fix"]
+        ],
+        "autoText": "  Checking the AP, I found that the customer's CPE "
+      },
+      "options": [["Move on", [null, 4, null]]]
+    },
+    {
+      "step": [null, 4, null],
+      "label": "Check the \"RSSI\" of the customer's CPE from the AP",
+      "infoData": {
+        "learnMore": "Link to RSSI",
+        "why": "explanation of why we look at the RSSI",
+        "what": ap.show_assoc_table,
+        "disposition": [
+          [0, "Troubleshooting"],
+          [1, "CPE"],
+          [2, "Poor Signal"],
+          [3, "Poor RSSI"],
+          [4, "Service Call"]
+        ],
+        "autoText": "I found that the customer's radio was associated, "
+      },
+      "options": [["Move on", ["Q", 1, "c"]]]
+    }
+  ]
+}

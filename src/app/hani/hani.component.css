@@ -1,0 +1,44 @@
+.sidewrapper {
+  border: 1px solid rgba(226, 233, 235, 0.979);
+  padding: 3px;
+}
+
+.horiznav {
+  background-color: rgb(255, 255, 255);
+  padding: 10px;
+  height: 15%;
+  margin: 10px 20px;
+}
+
+.w3-sidebarmod {
+  height: 100%;
+  background-color:rgba(240, 240, 240, 0.966);
+  overflow: auto;
+  padding: 5px;
+  width: 12%;
+  margin: 10px 20px;
+  border: 1px solid #ECF0F1;
+}
+
+input textarea {
+  width:80%;
+  border: 1px solid rgb(206, 204, 204);
+}
+
+.nowrap {
+  white-space: nowrap;
+  overflow:auto;
+  border: 1px solid #ECF0F1;
+}
+
+.btn-select {
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  width: 95%;
+  border:1px solid rgb(216, 216, 216)
+}
+
+.option-banner {
+  margin-bottom: 10px;
+  color:seashell
+}
