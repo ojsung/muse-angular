@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { SharedService } from 'src/app/alerts/alerts-http.service'
+import { AlertsHttpService } from 'src/app/alerts/alerts-http.service'
 import { HttpClient } from '@angular/common/http'
 import { AuthService } from 'src/app/user/auth.service'
 import { Observable } from 'rxjs'
@@ -9,7 +9,7 @@ import { tap, catchError } from 'rxjs/operators'
 @Injectable({
   providedIn: 'root'
 })
-export class DisasterHttpService extends SharedService {
+export class DisasterHttpService extends AlertsHttpService {
   private disasterUrl = 'api/events'
   constructor(protected http: HttpClient, public auth: AuthService) {
     super(http, auth)

@@ -13,12 +13,31 @@
   flex-direction: column; /*added*/
 }
 
-.importance {
-  position:fixed!important;
+ .haniWindow {
+  height: 100%;
+  width: 100%;
 }
 
+div.modal-dialog {
+  max-width: 95vw;
+  max-height: 95vw;
+  height: 95vh;
+  width: 95vw;
+}
+
+.modal-content {
+  height: 100%;
+  width: 100%
+}
 
 
 .enborder {
   border: 1px solid #ECF0F1;
+}
+
+cher-hani {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto
 }

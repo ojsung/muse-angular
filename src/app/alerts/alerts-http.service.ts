@@ -5,7 +5,7 @@ import { IHigh } from './high/high.model'
 import { IDisaster } from './disaster/disaster.model'
 import { HttpService } from '../shared/http.service';
 
-export class SharedService extends HttpService{
+export class AlertsHttpService extends HttpService{
   private enabledArray = ['isDown', 'active']
   constructor(protected http: HttpClient, public auth: AuthService) {
     super(http, auth)

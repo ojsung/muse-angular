@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark">
   <div class="row" style="margin-left:5px; text-align: center">
     <a class="navbar-brand"  [routerLink]="['/welcome']">{{ pageTitle }}</a>
-    <a class="nav-link" [routerLink]="['/disaster']">Disaster</a>
-    <a class="nav-link" [routerLink]="['/high']">High</a>
-    <a class="nav-link" [routerLink]="['/hani']">Hani</a>
+    <a class="nav-link" [routerLink]="['/alerts/disaster']">Disaster</a>
+    <a class="nav-link" [routerLink]="['/alerts/high']">High</a>
+    <cher-hani-modal></cher-hani-modal>
+    <!-- <a class="nav-link" [routerLink]="['/hani']">Hani</a> -->
     <a
       *ngIf="!auth.isAuthenticated()"
       class="nav-link"

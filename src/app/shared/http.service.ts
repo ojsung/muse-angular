@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs'
 import { tap, catchError } from 'rxjs/operators'
 
 export class HttpService {
-  
+
   protected incompleteUrl = 'api/'
   public headers = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ export class HttpService {
   constructor(protected http: HttpClient, public auth: AuthService) {}
 
   public getEntry(url): Observable<any[]> {
-    return this.http.get<any[]>(this.incompleteUrl + url).pipe(
+    return this.http.get<any[]>(this.incompleteUrl + url, { headers: this.headers }).pipe(
       tap(),
       catchError(this.handleError)
     )

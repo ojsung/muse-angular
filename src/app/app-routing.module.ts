@@ -10,6 +10,8 @@ const routes: Routes = [
     path: 'hani',
     loadChildren: () => import('./hani/hani.module').then(m => m.HaniModule)
   },
+  {path: 'alerts',
+loadChildren: () => import ('./alerts/alerts.module').then(m => m.AlertsModule)},
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ]
 

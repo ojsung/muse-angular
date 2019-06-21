@@ -22,7 +22,7 @@
     "@angular/router": "8.0.0",
     "core-js": "^2.5.4",
     "express": "4.16.4",
-    "font-awesome": "^4.7.0",
+    "font-awesome": "4.7.0",
     "install": "0.12.2",
     "npm": "6.9.0",
     "rxjs": "~6.5.2",
@@ -31,7 +31,7 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.800.0",
+    "@angular-devkit/build-angular": "0.800.3",
     "@angular/cli": "8.0.2",
     "@angular/compiler-cli": "8.0.0",
     "@angular/language-service": "8.0.0",
@@ -60,6 +60,6 @@
     "protractor": "~5.4.0",
     "ts-node": "^7.0.0",
     "tslint": "5.17.0",
-    "typescript": "^3.4.5"
+    "typescript": "~3.4.5"
   }
 }
