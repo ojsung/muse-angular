@@ -23,7 +23,7 @@ export class AlertsHttpService extends HttpService{
     const entryId = body._id
     url += `/${entryId}`
     delete body._id
-    return this.postEntry(url, body)
+    return this.putEntry(url, body)
     // return this.http
     //   .put<any>(`${this.incompleteUrl + url}/${entryId}`, body, { headers: this.headers })
     //   .pipe(

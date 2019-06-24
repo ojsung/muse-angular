@@ -103,7 +103,7 @@ export class HighFormComponent implements OnInit, OnDestroy {
   save() {
     this.siteControl.setValue(this.siteControl.value.toUpperCase())
     this.high = this.highForm.value as IHigh
-    this.hhs.postEntry(this.highUrl, this.high).subscribe()
+    this.hhs.putEntry(this.highUrl, this.high).subscribe()
     this.highForm.reset()
   }
 }

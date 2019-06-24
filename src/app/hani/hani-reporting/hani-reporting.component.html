@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-header">Trending Report</div>
+  <div class="card-body">
+    <p>
+      Because Cher and Hani have a very small, limited database, clicking the button will retrieve,
+      then clear, their database of all reporting info. Only click the button if you're absolutely
+      sure you want to retrieve and clear the reporting data for Hani.
+    </p>
+    <button class="btn btn-danger" (click)="sendToSheets()" *ngIf="!tableState">I Am Sure</button>
+    <textarea [(ngModel)]="csv" *ngIf="tableState"></textarea>
+    <!-- <table *ngIf="tableState">
+      <tr *ngFor="let trend of trendingResults">
+        <td>
+          <ul style="list-style: none">
+            <li>{{ trend.user.firstName }} {{ trend.user.lastName }}</li>
+            <li>{{trend.trending[0].workflow}}</li>
+          </ul>
+        </td>
+        <td>
+          <ul style="list-style: none">
+            <li>Step</li>
+            <li>Timestamp</li>
+          </ul>
+        </td>
+        <td *ngFor="let datum of trend.trending">
+          <ul style="list-style: none">
+            <li>{{ datum.step }}</li>
+            <li>{{ datum.date }}</li>
+          </ul>
+        </td>
+      </tr>
+    </table> -->
+  </div>
+</div>

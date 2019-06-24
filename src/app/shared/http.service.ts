@@ -1,7 +1,7 @@
 import { AuthService } from '../user/auth.service'
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs'
-import { tap, catchError } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 
 export class HttpService {
 
@@ -15,14 +15,18 @@ export class HttpService {
 
   public getEntry(url): Observable<any[]> {
     return this.http.get<any[]>(this.incompleteUrl + url, { headers: this.headers }).pipe(
-      tap(),
+      catchError(this.handleError)
+    )
+  }
+
+  public putEntry(url, body): Observable<any> {
+    return this.http.put<any>(this.incompleteUrl + url, body, { headers: this.headers }).pipe(
       catchError(this.handleError)
     )
   }
 
   public postEntry(url, body): Observable<any> {
-    return this.http.put<any>(this.incompleteUrl + url, body, { headers: this.headers }).pipe(
-      tap(),
+    return this.http.post<any>(this.incompleteUrl + url, body, { headers: this.headers }).pipe(
       catchError(this.handleError)
     )
   }

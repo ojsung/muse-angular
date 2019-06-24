@@ -1,9 +1,9 @@
 import { IWorkflowinfoData } from './workflow-option-info.model'
-import { Step } from './workflow-step.model'
+import { StepType } from './workflow-step.model'
 
 export interface IWorkflowOption extends Object {
-  step: Step
+  step: StepType
   label: string
   infoData: IWorkflowinfoData
-  options: Array<[string, Step]>
+  options: Array<[string, StepType]>
 }

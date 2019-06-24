@@ -1,4 +1,4 @@
-export interface QrfTemplate extends Object {
+export interface IQrfTemplate extends Object {
   'Customer ID': number
   Workflow: string
   'Where you are in the Workflow': string

@@ -16,7 +16,7 @@
       <span
         class="nav-span"
         *ngFor="let nav of currentNav"
-        (click)="selectNextStep(null, nav[0][0])"
+        (click)="trackAndSelectWorkflow(null, nav[0][0])"
       >
         <i class="fa fa-level-up fa-rotate-90"></i> {{ nav[0] }} - {{ nav[1] }} <br /><i
           class="fa fa-long-arrow-right"
@@ -86,7 +86,7 @@
         <div>
           {{ infoData.why }}
         </div>
-        <a href="infoData.learnMore">Learn More</a>
+        <a href="{{ infoData.learnMore }}">Learn More</a>
       </ng-container>
     </div>
     <form [formGroup]="siForm" style="flex:1">
@@ -128,7 +128,7 @@
             <button
               *ngFor="let option of currentWorkflow.options; let i = index"
               class="btn btn-light btn-select"
-              (click)="selectNextStep(i)"
+              (click)="trackAndSelectWorkflow(i)"
             >
               {{ option[0] }}
             </button>

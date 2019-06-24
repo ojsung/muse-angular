@@ -1,15 +1,16 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core'
-import { HaniHttpService } from './hani-http.service'
-import { Subscription } from 'rxjs'
-import { IWorkflowContainer } from './workflows/workflow-container.model'
-import { IWorkflowOption } from './workflows/workflow-option.model'
-import { IWorkflowDepartment } from './workflows/workflow-department.model'
-import { Step } from './workflows/workflow-step.model'
+import { IWorkflowContainer } from './models/workflows/workflow-container.model'
+import { IWorkflowOption } from './models/workflows/workflow-option.model'
+import { IWorkflowDepartment } from './models/workflows/workflow-department.model'
+import { StepType } from './models/workflows/workflow-step.model'
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms'
-import { IWorkflowinfoData } from './workflows/workflow-option-info.model'
-import { QrfTemplate } from './workflows/workflow-qrf-template.model'
+import { IWorkflowinfoData } from './models/workflows/workflow-option-info.model'
+import { IQrfTemplate } from './models/workflows/workflow-qrf-template.model'
 import { HaniService } from './hani.service'
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
+import { IWorkflowTrend } from './models/workflow-trend.model'
+import { WorkflowDispositionType } from './models/workflows/workflow-disposition.model'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'cher-hani',
@@ -18,24 +19,20 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class HaniComponent implements OnInit, OnDestroy {
   @Input() name
-  constructor(private http: HaniHttpService, private fb: FormBuilder, private hs: HaniService, public activeModal: NgbActiveModal) {}
+  constructor(
+    private fb: FormBuilder,
+    private hs: HaniService,
+    public activeModal: NgbActiveModal
+  ) {}
   public siForm: FormGroup // static info form
-  public optionsForm: FormGroup // form to handle options and input
-  private CPE
-  private AP
-  public departments: IWorkflowDepartment[]
   public currentDepartment: IWorkflowDepartment
-  private workflowUrl = 'hani'
-  private commandUrl = 'command'
-  private workflowSubscription: Subscription
-  private commandsSubscription: Subscription
   private calledFromWf = false
   public workflowContainersInDepartment: IWorkflowContainer[]
   private chosenWorkflowContainer: IWorkflowContainer
   public currentWorkflow: IWorkflowOption
   public azotelId: string
   public infoData: IWorkflowinfoData
-  public currentNav: Array<[[Step], string, string]> = []
+  public currentNav: Array<[[StepType], string, string]> = []
   public pageTitle = 'Hani: The Troubleshooting Assistant'
   private containerLength: number
   private azotelIdControl: AbstractControl
@@ -44,36 +41,33 @@ export class HaniComponent implements OnInit, OnDestroy {
   private cpeMACControl: AbstractControl
   private cpeIPControl: AbstractControl
   private autoboxControl: AbstractControl
-  private workflowComplete: IWorkflowOption = {
-    step: ['Q', 0, null],
-    label: 'Complete',
-    infoData: {
-      learnMore: 'Complete',
-      why:
-        'You have completed this workflow. If you are still experiencing issues, please contact QRF',
-      what: {
-        'Customer ID': null,
-        Workflow: null,
-        'Where you are in the Workflow': null,
-        'AP Device Name': null,
-        'AP IP': null,
-        'CPE MAC': null,
-        'CPE IP': null,
-        Question:
-          'I have completed the current workflow, but my customer is still experiencing issues.'
-      },
-      disposition: [[0, null], [1, null], [2, null], [3, null], [4, null]],
-      autoText: null
-    },
-    options: [['Complete', ['0', 0, '0']]]
-  }
+  private workflowTrendArray: Array<IWorkflowTrend> = []
+  private commandSubscription: Subscription
+  private workflowSubscription: Subscription
+  private trackingSubscription: Subscription
 
+  // Depending on what step the T1 is on, infoData may still be undefined.
+  // this let's the html know the state of infoData
   get infoDataDataType() {
     return this.infoData.what instanceof Object
   }
 
+  public get departments(): IWorkflowDepartment[] {
+    const departmentList = this.hs.departments
+    if (departmentList) {
+      return departmentList
+    } else {
+      this.workflowSubscription = this.hs.getWorkflows().subscribe(() =>this.workflowSubscription.unsubscribe())
+      this.commandSubscription = this.hs.getCommands().subscribe(() => this.commandSubscription.unsubscribe())
+      return this.hs.departments
+    }
+  }
+
+  public userName = this.hs.auth.firstName
+
+  // When a T1 needs to send in a QRF, this autofills the QRF with the customer's info
   get jsonInfoDataWhat() {
-    let filledOutJson: QrfTemplate
+    let filledOutJson: IQrfTemplate
     if (this.infoData.what instanceof Object && !(this.infoData.what instanceof Array)) {
       filledOutJson = this.infoData.what
       filledOutJson['Customer ID'] = this.azotelIdControl.value
@@ -105,24 +99,22 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.cpeMACControl = this.siForm.get('cpeMAC')
     this.cpeIPControl = this.siForm.get('cpeIP')
     this.autoboxControl = this.siForm.get('autobox')
-
-    this.workflowSubscription = this.http.getEntry(this.workflowUrl).subscribe(departments => {
-      this.departments = departments
-    })
-    this.commandsSubscription = this.http.getEntry(this.commandUrl).subscribe(radio => {
-      radio.forEach(device => {
-        if (device.deviceType === 'cpe') {
-          this.CPE = device.commands
-        } else {
-          this.AP = device.commands
-        }
-      })
-    })
   }
 
   ngOnDestroy() {
-    this.workflowSubscription.unsubscribe()
-    this.commandsSubscription.unsubscribe()
+    // because the subscription is only created if this.departments is empty,
+    // it is possible to create and destroy Hani without creating a subscription
+    // in cases where no sub was made, there will be nothing to destroy.
+    if (this.commandSubscription) {
+      this.commandSubscription.unsubscribe()
+      this.workflowSubscription.unsubscribe()
+    }
+
+    if (this.workflowTrendArray) {
+      this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe(() => {
+        this.trackingSubscription.unsubscribe()
+      })
+    }
   }
 
   // this will only be called once when the user is selecting which department's workflows to see
@@ -136,27 +128,20 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.chosenWorkflowContainer = this.workflowContainersInDepartment[index]
     const workflowBegin = this.chosenWorkflowContainer.begin
     this.containerLength = this.chosenWorkflowContainer.steps.length
-    this.selectNextStep(null, workflowBegin)
+    this.selectNextStep(workflowBegin)
   }
 
-  public selectNextStep(index?: number, workflowBegin?: Step) {
+  private get currentDisposition() {
+    return this.infoData ? this.infoData.disposition : null
+  }
+
+  private selectNextStep(chosenIndexStep: StepType) {
     // start by updating the notes in the autobox
     this.updateNotes()
-
-    // if we're already in the workflows, get the step and label for the workflow we are in.
-    // they will be used later to update the navigation history
-    let currentStep: Step
-    let currentLabel: string
-    ;({ currentStep, currentLabel } = this.setCurrentInfo(currentStep, currentLabel))
-
-    // use checkSource to see if we're entering this workflow from another workflow
-    // or from the workflow container or nav bar
-    // checkSource will return a falsy value if coming from the workflow container or nav bar
-    let chosenIndexStep: Step
-    let chosenIndexOptions: any
     let matchFound = false
-    chosenIndexOptions = this.checkSource(index, chosenIndexOptions)
-    chosenIndexStep = chosenIndexOptions ? chosenIndexOptions[1] : workflowBegin
+
+    // We need to save the current disposition codes, in case there is no next step
+    const currentDisposition = this.currentDisposition
 
     // loop through the workflows in the workflow container
     // if a match is found, set that workflow as the current workflow
@@ -173,15 +158,18 @@ export class HaniComponent implements OnInit, OnDestroy {
     }
 
     if (this.infoData.what instanceof Array) {
-      this.infoData.what = this.replaceArray(this.infoData.what)
+      this.infoData.what = this.hs.replaceArray(this.infoData.what)
     }
 
-    this.setCompleteWorkflow(matchFound)
-
-    // reset the called from wf tracker.
-    this.resetCalledFromWf(currentStep, currentLabel, chosenIndexOptions)
+    // if the next step wasn't found, it means that the rep has reached the end of the workflow
+    // in this case, the workflow we give them is the 'Completed' workflow.  However,
+    // we want to make sure they can still look at the dispositions they had last
+    if (!matchFound) {
+      this.setCompleteWorkflow(currentDisposition)
+    }
   }
 
+  // update the Navigation and reset calledFromWf to prep for the next navigation option
   private resetCalledFromWf(
     currentStep: [string, number, string],
     currentLabel: string,
@@ -193,11 +181,12 @@ export class HaniComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setCompleteWorkflow(matchFound: boolean) {
-    if (!matchFound) {
-      this.currentWorkflow = this.workflowComplete
-      this.infoData = this.workflowComplete.infoData
-    }
+  // if no match was found, the user must have completed the workflows
+  // in this case, give them the generic completed workflow object
+  private setCompleteWorkflow(currentDisposition: WorkflowDispositionType) {
+    this.currentWorkflow = this.hs.completeWorkflow
+    this.infoData = this.currentWorkflow.infoData
+    this.infoData.disposition = currentDisposition
   }
 
   private setCurrentInfo(currentStep: [string, number, string], currentLabel: string) {
@@ -216,6 +205,7 @@ export class HaniComponent implements OnInit, OnDestroy {
     return chosenIndexOptions
   }
 
+  // pushes autotext to autobox
   private updateNotes() {
     if (this.infoData && this.infoData.autoText) {
       this.autoboxControl.setValue(
@@ -225,18 +215,51 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.autoboxControl.updateValueAndValidity()
   }
 
-  private replaceArray(array: [string, string]) {
-    const objToSearch = array[0] === 'CPE' ? this.CPE : this.AP
-    const keyToFind = array[1]
-    return objToSearch[keyToFind]
-  }
-
   public restart() {
+    this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe(() => {
+      this.trackingSubscription.unsubscribe()
+    })
     this.currentDepartment = null
     this.currentNav = []
     this.currentWorkflow = null
     this.workflowContainersInDepartment = []
     this.infoData = null
+    this.workflowTrendArray = []
     this.siForm.reset()
+  }
+
+  // this handles interactions from the template
+  // this will be called either once the t1 is already in a workflow
+  // or when they choose their first workflow
+  public trackAndSelectWorkflow(index?: number, workflowBegin?: StepType) {
+    this.hs.gatherWorkflowTrend(
+      this.chosenWorkflowContainer,
+      this.currentWorkflow.step,
+      this.workflowTrendArray
+    )
+
+    let chosenIndexOptions: any
+    chosenIndexOptions = this.checkSource(index, chosenIndexOptions)
+    const chosenIndexStep = this.findChosenStep(chosenIndexOptions, index, workflowBegin)
+    this.selectNextStep(chosenIndexStep)
+  }
+
+  private findChosenStep(chosenIndexOptions: any, index: number, workflowBegin: StepType) {
+    // if we're already in the workflows, get the step and label for the workflow we are in.
+    // they will be used later to update the navigation history
+    let currentStep: StepType
+    let currentLabel: string
+    ;({ currentStep, currentLabel } = this.setCurrentInfo(currentStep, currentLabel))
+
+    // use checkSource to see if we're entering this workflow from another workflow
+    // or from the workflow container or nav bar
+    // checkSource will return a falsy value if coming from the workflow container or nav bar
+    let chosenIndexStep: StepType
+    chosenIndexStep = chosenIndexOptions ? chosenIndexOptions[1] : workflowBegin
+
+    // reset the called from wf tracker.
+    this.resetCalledFromWf(currentStep, currentLabel, chosenIndexOptions)
+
+    return chosenIndexStep
   }
 }
