@@ -86,7 +86,7 @@
         <div>
           {{ infoData.why }}
         </div>
-        <a href="{{ infoData.learnMore }}">Learn More</a>
+        <a *ngIf="infoData.learnMore!=='Complete'" href="{{ infoData.learnMore }}">Learn More</a>
       </ng-container>
     </div>
     <form [formGroup]="siForm" style="flex:1">
@@ -117,14 +117,14 @@
           </button>
         </ng-container>
         <ng-container *ngIf="infoData">
-          <div class="card-header bg-secondary option-banner"><strong> What to Do:</strong></div>
+          <div class="card-header bg-secondary option-banner"><strong> What to Do: {{ currentWorkflow.label }}</strong></div>
           <div style="white-space: pre-line" *ngIf="!infoDataDataType">{{ infoData.what }}</div>
           <ng-container *ngIf="infoDataDataType">
             <span *ngFor="let entry of jsonInfoDataWhat"
               >{{ entry[0] }} : {{ entry[1] }} <br
             /></span>
           </ng-container>
-          <ng-container *ngIf="infoData.learnMore !== 'Complete'">
+          <ng-container *ngIf="currentWorkflow.step[0]!=='R'">
             <button
               *ngFor="let option of currentWorkflow.options; let i = index"
               class="btn btn-light btn-select"
@@ -133,10 +133,11 @@
               {{ option[0] }}
             </button>
           </ng-container>
-          <ng-container *ngIf="infoData.learnMore === 'Complete'">
-            <button (click)="restart()" class="btn btn-danger dangerbuttons">
+          <ng-container *ngIf="currentWorkflow.step[0]==='R'">
+            <button (click)="restart()" class="btn btn-info dangerbuttons">
               Restart
             </button>
+            <button (click)="fullRestart()" class="btn btn-danger dangerbuttons">Restart and Clear Notes</button>
             <button
               class="btn btn-danger dangerbuttons"
               (click)="activeModal.close('Close click')"

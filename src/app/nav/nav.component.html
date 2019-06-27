@@ -3,7 +3,7 @@
     <a class="navbar-brand"  [routerLink]="['/welcome']">{{ pageTitle }}</a>
     <a class="nav-link" [routerLink]="['/alerts/disaster']">Disaster</a>
     <a class="nav-link" [routerLink]="['/alerts/high']">High</a>
-    <a class="nav-link" [routerLink]="['/hani/reporting']" *ngIf="this.auth.firstName === 'T3'">Reporting</a>
+    <a class="nav-link" [routerLink]="['/hani/reporting']" *ngIf="this.auth.checkAuthLevel()">Reporting</a>
     <cher-hani-modal></cher-hani-modal>
     <!-- <a class="nav-link" [routerLink]="['/hani']">Hani</a> -->
     <a

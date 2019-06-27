@@ -22,5 +22,4 @@ export class UserComponent implements OnInit {
       error => this.errorMessage = error as any
     )
   }
-
 }

@@ -20,6 +20,7 @@ export class HaniService extends HttpService implements OnDestroy {
   private departmentList: IWorkflowDepartment[]
   private CPE: object
   private AP: object
+  private switch: object
   private commandUrl = 'command'
   private workflowUrl = 'hani'
   public trendingUrl = 'trending'
@@ -72,8 +73,23 @@ export class HaniService extends HttpService implements OnDestroy {
   }
 
   public replaceArray(array: [string, string]) {
-    const objToSearch = array[0] === 'CPE' ? this.CPE : this.AP
+    let objToSearch: object
     const keyToFind = array[1]
+    switch (array[0]) {
+      case 'CPE': {
+        objToSearch = this.CPE
+        break
+      }
+      case 'AP': {
+        objToSearch = this.AP
+        break
+      }
+      case 'switch': {
+        objToSearch = this.switch
+        break
+      }
+      default: console.log('Something broke in HaniService.replaceArray()')
+  }
     return objToSearch[keyToFind]
   }
 
@@ -81,15 +97,28 @@ export class HaniService extends HttpService implements OnDestroy {
     return this.getEntry(this.commandUrl).pipe(
       tap(radio => {
         radio.forEach(device => {
-          if (device.deviceType === 'cpe') {
-            this.CPE = device.commands as object
-          } else {
-            this.AP = device.commands as object
+          switch (device.deviceType) {
+            case 'cpe': {
+              this.CPE = device.commands as object
+              break
+            }
+            case 'ap': {
+              this.AP = device.commands as object
+              break
+            }
+            case 'switch': {
+              this.switch = device.commands as object
+              break
+            }
+            default: {
+              console.log('Something broke in HaniService.getCommands()')
+              }
           }
         })
       })
     )
   }
+
   public getWorkflows() {
     return this.getEntry(this.workflowUrl).pipe(
       tap(departments => {

@@ -216,15 +216,19 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   public restart() {
-    this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe(() => {
-      this.trackingSubscription.unsubscribe()
-    })
     this.currentDepartment = null
     this.currentNav = []
     this.currentWorkflow = null
     this.workflowContainersInDepartment = []
     this.infoData = null
     this.workflowTrendArray = []
+  }
+
+  public fullRestart() {
+    this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe(() => {
+      this.trackingSubscription.unsubscribe()
+    })
+    this.restart()
     this.siForm.reset()
   }
 
