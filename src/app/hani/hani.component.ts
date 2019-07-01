@@ -34,7 +34,6 @@ export class HaniComponent implements OnInit, OnDestroy {
   public infoData: IWorkflowinfoData
   public currentNav: Array<[[StepType], string, string]> = []
   public pageTitle = 'Hani: The Troubleshooting Assistant'
-  private containerLength: number
   private azotelIdControl: AbstractControl
   private apNameControl: AbstractControl
   private apIPControl: AbstractControl
@@ -45,6 +44,13 @@ export class HaniComponent implements OnInit, OnDestroy {
   private commandSubscription: Subscription
   private workflowSubscription: Subscription
   private trackingSubscription: Subscription
+  private initialWorkflow: string
+  public showTextBox = false
+  public textReport = ''
+  private get reportToSend() {
+    return this.textReport
+  }
+  private bugReportSubscription: Subscription
 
   // Depending on what step the T1 is on, infoData may still be undefined.
   // this let's the html know the state of infoData
@@ -57,10 +63,18 @@ export class HaniComponent implements OnInit, OnDestroy {
     if (departmentList) {
       return departmentList
     } else {
-      this.workflowSubscription = this.hs.getWorkflows().subscribe(() =>this.workflowSubscription.unsubscribe())
-      this.commandSubscription = this.hs.getCommands().subscribe(() => this.commandSubscription.unsubscribe())
+      this.workflowSubscription = this.hs
+        .getWorkflows()
+        .subscribe(() => this.workflowSubscription.unsubscribe())
+      this.commandSubscription = this.hs
+        .getCommands()
+        .subscribe(() => this.commandSubscription.unsubscribe())
       return this.hs.departments
     }
+  }
+
+  private get containerLength(): number {
+    return this.chosenWorkflowContainer ? this.chosenWorkflowContainer.steps.length : 0
   }
 
   public userName = this.hs.auth.firstName
@@ -70,6 +84,7 @@ export class HaniComponent implements OnInit, OnDestroy {
     let filledOutJson: IQrfTemplate
     if (this.infoData.what instanceof Object && !(this.infoData.what instanceof Array)) {
       filledOutJson = this.infoData.what
+      filledOutJson['Initial Workflow'] = this.initialWorkflow
       filledOutJson['Customer ID'] = this.azotelIdControl.value
       filledOutJson['AP Device Name'] = this.apNameControl.value
       filledOutJson['AP IP'] = this.apIPControl.value
@@ -127,7 +142,7 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.workflowContainersInDepartment = this.currentDepartment.workflows
     this.chosenWorkflowContainer = this.workflowContainersInDepartment[index]
     const workflowBegin = this.chosenWorkflowContainer.begin
-    this.containerLength = this.chosenWorkflowContainer.steps.length
+    this.initialWorkflow = this.chosenWorkflowContainer.workflowName
     this.selectNextStep(workflowBegin)
   }
 
@@ -215,21 +230,29 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.autoboxControl.updateValueAndValidity()
   }
 
-  public restart() {
+  public clearDepartmentAndWorkflow() {
     this.currentDepartment = null
+    this.workflowContainersInDepartment = []
+    this.clearCurrentWorkflow()
+  }
+
+  private clearCurrentWorkflow() {
     this.currentNav = []
     this.currentWorkflow = null
-    this.workflowContainersInDepartment = []
     this.infoData = null
     this.workflowTrendArray = []
   }
 
   public fullRestart() {
+    this.sendToServer()
+    this.clearDepartmentAndWorkflow()
+    this.siForm.reset()
+  }
+
+  private sendToServer() {
     this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe(() => {
       this.trackingSubscription.unsubscribe()
     })
-    this.restart()
-    this.siForm.reset()
   }
 
   // this handles interactions from the template
@@ -265,5 +288,37 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.resetCalledFromWf(currentStep, currentLabel, chosenIndexOptions)
 
     return chosenIndexStep
+  }
+
+  public moveToDifferentFlow(workflowName) {
+    const newWorkflow = workflowName
+    let workflowFirstStep: StepType
+    this.sendToServer()
+    this.clearCurrentWorkflow()
+    const length = this.workflowContainersInDepartment.length
+    for (let i = 0, j = length; i < j; i++) {
+      const workflow = this.workflowContainersInDepartment[i]
+      if (workflow.workflowName === newWorkflow) {
+        this.chosenWorkflowContainer = workflow
+        break
+      }
+    }
+    workflowFirstStep = this.chosenWorkflowContainer.begin
+    this.selectNextStep(workflowFirstStep)
+  }
+
+  public reportProblem(reportType) {
+    const currentWfStep = this.currentWorkflow.step
+    const report = this.reportToSend
+    const fullReport = `${reportType}\n${this.currentNav}, ${currentWfStep}\n${report}`
+    this.bugReportSubscription = this.hs.postBugs(fullReport).subscribe(() => {
+      this.bugReportSubscription.unsubscribe()
+      this.showTextBox = false
+      this.textReport = ''
+    })
+  }
+
+  public openReporting() {
+    this.showTextBox = true
   }
 }

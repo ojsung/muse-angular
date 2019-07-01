@@ -1,6 +1,7 @@
 export interface IQrfTemplate extends Object {
   'Customer ID': number
-  Workflow: string
+  'Initial Workflow': string
+  'Current Workflow': string
   'Where you are in the Workflow': string
   'AP Device Name': string
   'AP IP': string

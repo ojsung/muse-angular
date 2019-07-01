@@ -1,8 +1,8 @@
 <div>
-  <h1> This page doesn't work yet </h1>
+  <h1>User Information</h1>
   <hr>
   <div class="col-md-4">
-    <form [formGroup]="profileForm" autocomplete="off" (ngSubmit)="saveProfile(profileForm.value)" novalidate>
+    <form [formGroup]="profileForm" autocomplete="off" (ngSubmit)="saveProfile()" novalidate>
       <div class="form-group" [ngClass]="{'error' : !validateFirstName()}">
         <label for="firstName">First Name:</label>
         <em *ngIf="!validateFirstName() && profileForm.controls.firstName.errors.required">Required</em>
@@ -17,8 +17,12 @@
         <em *ngIf="!validateLastName() && profileForm.controls.lastName.errors.restrictedWords">Contains restricted word</em>
         <input formControlName="lastName" id="lastName" type="text" class="form-control" placeholder="Last Name..." />
       </div>
+      <div class="form-group">
+        <label for="password">Change Password: </label>
+        <input formControlName="password" id="password" type="text" class="form-control" placeholder="Enter a new password"/>
+      </div>
 
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary" (click)="saveProfile()">Save</button>
       <button type="button" class="btn btn-default"style="border:1px solid #444444; margin-left:5px" (click)="cancel()">Cancel</button>
     </form>
   </div>

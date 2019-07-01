@@ -12,17 +12,14 @@
 </div>
 <div class="modal-body rowflex" style="height: 100%; width: 100%">
   <div class="w3-sidebarmod w3-bar-block enborder" style="order:0;">
+    <h6>Navigation History</h6>
+    <button class="btn btn-light" style="width:100%" (click)="fullRestart()" *ngIf="currentDepartment">Restart</button>
     <ng-container *ngIf="currentNav">
-      <span
-        class="nav-span"
-        *ngFor="let nav of currentNav"
-        (click)="trackAndSelectWorkflow(null, nav[0][0])"
-      >
-        <i class="fa fa-level-up fa-rotate-90"></i> {{ nav[0] }} - {{ nav[1] }} <br /><i
-          class="fa fa-long-arrow-right"
-          aria-hidden="true"
-        ></i>
-        {{ nav[2] }} <br /><br />
+      <span *ngFor="let nav of currentNav">
+        <span (click)="trackAndSelectWorkflow(null, nav[0][0])" class="fakelink">Return to {{ nav[0] }}</span
+        ><br />
+        {{ nav[1] }} <i class="fa fa-long-arrow-right" aria-hidden="true"></i> {{ nav[2] }}
+        <br /><br />
       </span>
     </ng-container>
     <div *ngIf="!currentNav">No history to display</div>
@@ -83,10 +80,33 @@
   <div class="columnflex" style="order: 1; margin: 10px; margin-bottom:25px" style="flex:1">
     <div class="w3-bar horiznav">
       <ng-container *ngIf="infoData">
-        <div>
-          {{ infoData.why }}
+        <div class="rowflex">
+          <span style="order: 1" *ngIf="!showTextBox">{{ infoData.why }}</span>
+          <textarea
+            *ngIf="showTextBox"
+            style="width: 80%; height: 80%; order: 1"
+            placeholder="Your current location in the workflow is automatically reported"
+            [(ngModel)]="textReport"
+          ></textarea>
+          <ng-container *ngIf="!showTextBox">
+            <button class="btn btn-light reportbutton" (click)="openReporting()">
+              Feature Request/Bug Report
+            </button></ng-container
+          >
+          <ng-container *ngIf="showTextBox" class="reportbutton">
+            <button class="btn btn-light" (click)="reportProblem('Feature Request')">
+              Requesting a Feature
+            </button>
+            <button class="btn btn-light" (click)="reportProblem('Bug Report')">
+              Reporting a Bug
+            </button></ng-container
+          >
         </div>
-        <a *ngIf="infoData.learnMore!=='Complete'" href="{{ infoData.learnMore }}">Learn More</a>
+        <a
+          *ngIf="infoData.learnMore && infoData.learnMore.startsWith('http')"
+          href="{{ infoData.learnMore }}"
+          >Learn More</a
+        >
       </ng-container>
     </div>
     <form [formGroup]="siForm" style="flex:1">
@@ -117,14 +137,16 @@
           </button>
         </ng-container>
         <ng-container *ngIf="infoData">
-          <div class="card-header bg-secondary option-banner"><strong> What to Do: {{ currentWorkflow.label }}</strong></div>
+          <div class="card-header bg-secondary option-banner">
+            <strong> What to Do: {{ currentWorkflow.label }}</strong>
+          </div>
           <div style="white-space: pre-line" *ngIf="!infoDataDataType">{{ infoData.what }}</div>
           <ng-container *ngIf="infoDataDataType">
             <span *ngFor="let entry of jsonInfoDataWhat"
               >{{ entry[0] }} : {{ entry[1] }} <br
             /></span>
           </ng-container>
-          <ng-container *ngIf="currentWorkflow.step[0]!=='R'">
+          <ng-container *ngIf="currentWorkflow.options && currentWorkflow.options[0][1]">
             <button
               *ngFor="let option of currentWorkflow.options; let i = index"
               class="btn btn-light btn-select"
@@ -133,15 +155,21 @@
               {{ option[0] }}
             </button>
           </ng-container>
-          <ng-container *ngIf="currentWorkflow.step[0]==='R'">
-            <button (click)="restart()" class="btn btn-info dangerbuttons">
+          <ng-container *ngIf="currentWorkflow.step[0] === 'R'">
+            <button
+              (click)="moveToDifferentFlow(currentWorkflow.options[0][0])"
+              class="btn btn-info dangerbuttons"
+              *ngIf="infoData.learnMore === 'Continue'"
+            >
+              Move to {{ currentWorkflow.options[0][0] }} Workflow
+            </button>
+            <button (click)="clearCurrentWorkflow()" class="btn btn-info dangerbuttons">
               Restart
             </button>
-            <button (click)="fullRestart()" class="btn btn-danger dangerbuttons">Restart and Clear Notes</button>
-            <button
-              class="btn btn-danger dangerbuttons"
-              (click)="activeModal.close('Close click')"
-            >
+            <button (click)="fullRestart()" class="btn btn-danger dangerbuttons">
+              Restart and Clear Notes
+            </button>
+            <button class="btn btn-danger dangerbuttons" (click)="activeModal.close('Close click')">
               Close
             </button>
           </ng-container>

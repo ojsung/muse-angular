@@ -15,6 +15,8 @@ export class AuthService {
   private TOKEN_KEY = 'token'
   private FIRST_KEY = 'firstName'
   private LAST_KEY = 'lastName'
+  private ID_KEY = 'id'
+  private options = { headers: new HttpHeaders({ Content_type: 'application/json' }) }
 
   get token() {
     return localStorage.getItem(this.TOKEN_KEY)
@@ -26,29 +28,36 @@ export class AuthService {
     return localStorage.getItem(this.LAST_KEY)
   }
 
+  get id() {
+    return localStorage.getItem(this.ID_KEY)
+  }
+
   public loginUser(userName: string, password: string) {
     const loginInfo = { userName, password }
-    const options = { headers: new HttpHeaders({ Content_type: 'application/json' }) }
 
     return this.http
-      .post<IAuthResponse>('/api/user/login', loginInfo, options)
+      .post<IAuthResponse>('/api/user/login', loginInfo, this.options)
       .pipe(
         tap(res => {
           localStorage.setItem('token', res.token)
           localStorage.setItem('firstName', res.user.firstName)
           localStorage.setItem('lastName', res.user.lastName)
+          localStorage.setItem('id', res.user._id.toString())
           this.currentUser = res.user as IUser
         }))
       .pipe(
         catchError(err => of(false)))
   }
 
-  public updateCurrentUser(firstName: string, lastName: string) {
+  public updateCurrentUser(firstName: string, lastName: string, password: string) {
     this.currentUser.firstName = firstName
     this.currentUser.lastName = lastName
 
-    const options = { headers: new HttpHeaders({ Content_type: 'application/json' }) }
-    return this.http.put(`/api/user/${this.currentUser._id}`, this.currentUser, options)
+    return this.http.put(`/api/user/${this.currentUser._id}`, { ...this.currentUser, password }, this.options)
+  }
+
+  public updatePassword(password: string) {
+
   }
 
   public isAuthenticated() {

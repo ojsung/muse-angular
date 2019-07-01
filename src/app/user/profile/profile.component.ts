@@ -15,6 +15,11 @@ export class ProfileComponent implements OnInit {
   private currentUser: IUser
   private firstName: FormControl
   private lastName: FormControl
+  private password: FormControl
+  private newPassword: FormControl
+  private get formValues() {
+    return this.profileForm.value
+  }
 
   constructor(
     private auth: AuthService,
@@ -34,17 +39,25 @@ export class ProfileComponent implements OnInit {
           'anal', 'anus', 'arse', 'ass', 'ballsack', 'balls', 'bastard', 'bitch', 'biatch', 'bloody', 'blowjob', 'blow job', 'bollock', 'bollok', 'boner', 'boob', 'bugger', 'bum', 'butt', 'buttplug', 'clitoris', 'cock', 'coon', 'crap', 'cunt', 'damn', 'dick', 'dildo', 'dyke', 'fag', 'feck', 'fellate', 'fellatio', 'felching', 'fuck', 'f u c k', 'fudgepacker', 'fudge packer', 'flange', 'Goddamn', 'God damn', 'hell', 'homo', 'jerk', 'jizz', 'knobend', 'knob end', 'labia', 'lmao', 'lmfao', 'muff', 'nigger', 'nigga', 'omg', 'penis', 'piss', 'poop', 'prick', 'pube', 'pussy', 'queer', 'scrotum', 'sex', 'shit', 's hit', 'sh1t', 'slut', 'smegma', 'spunk', 'tit', 'tosser', 'turd', 'twat', 'vagina', 'wank', 'whore', 'wtf'
         ])
       ])
+    this.password = new FormControl(
+      null
+    )
     this.profileForm = new FormGroup({
       firstName: this.firstName,
-      lastName: this.lastName
+      lastName: this.lastName,
+      password: this.password,
+      newPassword: this.newPassword
     })
   }
   cancel() {
     this.router.navigate(['welcome'])
   }
-  saveProfile(formValues) {
+  saveProfile() {
     if (this.profileForm.valid) {
-      this.auth.updateCurrentUser(formValues.firstName, formValues.lastName)
+      if (this.formValues.password) {
+        this.updatePassword(this.formValues.password)
+      }
+      this.auth.updateCurrentUser(this.formValues.firstName, this.formValues.lastName, this.formValues.password)
       .subscribe(() => {
         console.log('successfully saved')
       })
@@ -56,6 +69,10 @@ export class ProfileComponent implements OnInit {
 
   validateLastName() {
     return this.profileForm.controls.lastName.valid || this.profileForm.controls.lastName.untouched
+  }
+
+  updatePassword(password: string) {
+    this.auth.updatePassword(password)
   }
 
 }

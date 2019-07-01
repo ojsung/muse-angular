@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy } from '@angular/core'
-import { IUser } from '../user/user.model'
 import { IWorkflowContainer } from './models/workflows/workflow-container.model'
 import { StepType } from './models/workflows/workflow-step.model'
 import { IWorkflowTrend } from './models/workflow-trend.model'
@@ -9,7 +8,7 @@ import { HttpService } from '../shared/http.service'
 import { HttpClient } from '@angular/common/http'
 import { IWorkflowDepartment } from './models/workflows/workflow-department.model'
 import { tap } from 'rxjs/operators'
-import { Subscription, Observable } from 'rxjs'
+import { Subscription } from 'rxjs'
 
 @Injectable()
 export class HaniService extends HttpService implements OnDestroy {
@@ -24,6 +23,7 @@ export class HaniService extends HttpService implements OnDestroy {
   private commandUrl = 'command'
   private workflowUrl = 'hani'
   public trendingUrl = 'trending'
+  private bugUrl = 'bug'
   private trendingSubscription: Subscription
   private workflowComplete: IWorkflowOption = {
     step: ['Q', 0, null],
@@ -31,17 +31,18 @@ export class HaniService extends HttpService implements OnDestroy {
     infoData: {
       learnMore: 'Complete',
       why:
-        'You have completed this workflow. If you are still experiencing issues, please contact QRF',
+        'If you are seeing this, please fill out the bug report and make the note "It failed here". If you customer requires further help, please contact QRF',
       what: {
         'Customer ID': null,
-        Workflow: null,
+        'Initial Workflow': null,
+        'Current Workflow': null,
         'Where you are in the Workflow': null,
         'AP Device Name': null,
         'AP IP': null,
         'CPE MAC': null,
         'CPE IP': null,
         Question:
-          'I have completed the current workflow, but my customer is still experiencing issues.'
+          'Hani has reached a failpoint, and I have filled out a bugreport.  But my customer is still experiencing issues.'
       },
       disposition: [[0, null], [1, null], [2, null], [3, null], [4, null]],
       autoText: null
@@ -125,6 +126,11 @@ export class HaniService extends HttpService implements OnDestroy {
         this.departmentList = departments
       })
     )
+  }
+
+  public postBugs(bugReport: string) {
+    const date = Date.now()
+    return this.postEntry(this.bugUrl, { bug: bugReport, date })
   }
 
   public postTracking(workflowTrendArray) {
