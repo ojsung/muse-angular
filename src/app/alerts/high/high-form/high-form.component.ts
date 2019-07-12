@@ -11,7 +11,7 @@ import { HighHttpService } from '../high-http.service'
   styleUrls: ['./high-form.component.css', '../../alerts.tables.css']
 })
 export class HighFormComponent implements OnInit, OnDestroy {
-  constructor(private fb: FormBuilder, private hs: HighService, private hhs: HighHttpService) { }
+  constructor(private fb: FormBuilder, private hs: HighService, private hhs: HighHttpService) {}
   @Input() high: IHigh
   public highForm: FormGroup
   siteMessage: IHighControl = { str: 'This field is required' }
@@ -80,11 +80,13 @@ export class HighFormComponent implements OnInit, OnDestroy {
       this.hs.setSubscription(controlArray[0], controlArray[1])
     })
 
-    this.summaryWatcher = this.summaryControl.statusChanges.subscribe(value => {
-      if (value === 'VALID') {
-        this.summaryPlaceholder = 'optional'
-      } else {
-        this.summaryPlaceholder = 'required'
+    this.summaryWatcher = this.summaryControl.statusChanges.subscribe({
+      next: value => {
+        if (value === 'VALID') {
+          this.summaryPlaceholder = 'optional'
+        } else {
+          this.summaryPlaceholder = 'required'
+        }
       }
     })
 

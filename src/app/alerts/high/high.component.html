@@ -29,7 +29,7 @@
                   style="margin:5px"
                   class="btn btn-danger"
                 >
-                  <i class="far fa-times-circle"></i></button
+                  <i class="icon-angle-circled-down"></i></button
                 >{{ obj.site }}
               </td>
               <td>{{ obj.time | date: 'medium' }}</td>
@@ -47,17 +47,19 @@
             <td colspan="7">No Alerts to Display (Auto-refreshes Every 15s)</td>
           </tr>
           <tr>
-            <th colspan="7" (click)="this.toggleInactives()"><i
-              style="margin-right: 2px"
-              class="fa fa-plus-square-o"
-              *ngIf="!inactiveToggle"
-            ></i>
-            <i
-              style="margin-right: 2px"
-              class="fa fa-minus-square"
-              *ngIf="inactiveToggle"
-            ></i>
-            Inactive Alerts</th>
+            <th colspan="7" (click)="this.toggleInactives()">
+              <i
+                style="margin-right: 2px"
+                class="icon-plus-squared-alt"
+                *ngIf="!inactiveToggle"
+              ></i>
+              <i
+                style="margin-right: 2px"
+                class="icon-minus-squared-alt"
+                *ngIf="inactiveToggle"
+              ></i>
+              Inactive Alerts
+            </th>
           </tr>
           <ng-container *ngIf="this.inactiveToggle">
             <ng-container *ngFor="let obj of highInactive; let i = index" colspan="7">
@@ -69,7 +71,7 @@
                     class="btn btn-success"
                     style="margin:5px"
                   >
-                    <i class="far fa-check-circle"></i></button
+                    <i class="icon-angle-circled-up"></i></button
                   >{{ obj.site }}
                 </td>
                 <td>{{ obj.time | date: 'medium' }}</td>
@@ -102,6 +104,9 @@
             <cher-high-form [high]="high"></cher-high-form>
           </div>
         </div>
+      </div>
+      <div *ngIf="!this.authenticated" class="card-body">
+        Log in to view outages.
       </div>
     </div>
   </div>

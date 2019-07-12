@@ -1,0 +1,20 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2019 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="angle-circled-up" unicode="&#xf139;" d="M650 214l57 57q11 11 11 25t-11 26l-253 253q-11 11-25 11t-25-11l-254-253q-10-11-10-26t10-25l57-57q11-10 25-10t25 10l172 172 171-172q11-10 25-10t25 10z m207 136q0-117-57-215t-156-156-215-58-216 58-155 156-58 215 58 215 155 156 216 58 215-58 156-156 57-215z" horiz-adv-x="857.1" />
+
+<glyph glyph-name="angle-circled-down" unicode="&#xf13a;" d="M454 125l253 254q11 10 11 25t-11 25l-57 57q-10 10-25 10t-25-10l-171-172-172 172q-10 10-25 10t-25-10l-57-57q-10-11-10-25t10-25l254-254q10-10 25-10t25 10z m403 225q0-117-57-215t-156-156-215-58-216 58-155 156-58 215 58 215 155 156 216 58 215-58 156-156 57-215z" horiz-adv-x="857.1" />
+
+<glyph glyph-name="minus-squared-alt" unicode="&#xf147;" d="M643 404v-36q0-8-5-13t-13-5h-464q-8 0-13 5t-5 13v36q0 7 5 12t13 5h464q8 0 13-5t5-12z m71-250v464q0 37-26 63t-63 26h-464q-37 0-63-26t-27-63v-464q0-37 27-63t63-27h464q37 0 63 27t26 63z m72 464v-464q0-67-47-114t-114-47h-464q-67 0-114 47t-47 114v464q0 66 47 113t114 48h464q66 0 114-48t47-113z" horiz-adv-x="785.7" />
+
+<glyph glyph-name="right" unicode="&#xf178;" d="M964 352q0-8-5-14l-215-197q-8-8-19-4-11 5-11 17v125h-696q-8 0-13 5t-5 12v108q0 7 5 12t13 5h696v125q0 12 11 17t19-3l215-195q5-6 5-13z" horiz-adv-x="1000" />
+
+<glyph glyph-name="plus-squared-alt" unicode="&#xf196;" d="M643 404v-36q0-8-5-13t-13-5h-196v-196q0-8-5-13t-13-5h-36q-8 0-13 5t-5 13v196h-196q-8 0-13 5t-5 13v36q0 7 5 12t13 5h196v197q0 8 5 13t13 5h36q8 0 13-5t5-13v-197h196q8 0 13-5t5-12z m71-250v464q0 37-26 63t-63 26h-464q-37 0-63-26t-27-63v-464q0-37 27-63t63-27h464q37 0 63 27t26 63z m72 464v-464q0-67-47-114t-114-47h-464q-67 0-114 47t-47 114v464q0 66 47 113t114 48h464q66 0 114-48t47-113z" horiz-adv-x="785.7" />
+</font>
+</defs>
+</svg>

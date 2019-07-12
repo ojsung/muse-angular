@@ -17,15 +17,18 @@ export class DisasterComponent implements OnInit, OnDestroy {
   public showDetail = false
   public expandedIndex: number
   public authorized = this.dhs.auth.checkAuthLevel()
+  public authenticated = this.dhs.auth.isAuthenticated()
   public retrievedDisasters: IDisaster[] = []
   public displayedArray = []
   private filteredDisasters: IDisaster[]
   private finalArray = []
   private eventSubscription: Subscription
+  private disasterSubscription: Subscription
   private subscription
   private timer
   private disasterUrl = 'events'
   private errorMessage: any
+  public sayRefresh = false
 
   // retrieve list filter (if any) from the html.  Also tslint is dumb and doesn't like my variable name
   /* tslint:disable:variable-name */
@@ -49,9 +52,11 @@ export class DisasterComponent implements OnInit, OnDestroy {
   ) {
     // begin subscribing to disasterService's filtering now that this page is now loaded
     // this will start getting the listfilter and any outages that match the filter
-    this.eventSubscription = this.des.getEventEmitter().subscribe(bool => {
-      if (bool === true) {
-        this.checkAndUpdateFilter()
+    this.eventSubscription = this.des.getEventEmitter().subscribe({
+      next: bool => {
+        if (bool === true) {
+          this.checkAndUpdateFilter()
+        }
       }
     })
   }
@@ -59,21 +64,26 @@ export class DisasterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Cher will only ask for updates every 15s
     this.timer = timer(0, 15000)
-    this.subscription = this.timer.subscribe(x => {
-      this.dhs.getEntry(this.disasterUrl).subscribe(
-        disasters => {
-          this.retrievedDisasters = disasters
-          this.filteredDisasters = disasters
-          this.finalArray = this.arrayToObjArray(this.filteredDisasters)
+    this.subscription = this.timer.subscribe({
+      next: x => {
+        this.disasterSubscription = this.dhs.getEntry(this.disasterUrl).subscribe({
+          next: disasters => {
+            this.retrievedDisasters = disasters
+            this.filteredDisasters = disasters
+            this.finalArray = this.arrayToObjArray(this.filteredDisasters)
 
-          // Tell Cher to start the process to check and update the list filter
-          this.des.emitBoolean(true)
-        },
-        error => {
-          this.errorMessage = error as any
-          console.log(this.errorMessage)
-        }
-      )
+            // Tell Cher to start the process to check and update the list filter
+            this.des.emitBoolean(true)
+          },
+          error: error => {
+            this.errorMessage = error as any
+            console.log(this.errorMessage)
+            this.sayRefresh = true
+            this.disasterSubscription.unsubscribe()
+            this.subscription.unsubscribe()
+          }
+        })
+      }
     })
   }
 
@@ -87,7 +97,9 @@ export class DisasterComponent implements OnInit, OnDestroy {
   }
 
   public removeDisaster(disaster) {
-    this.dhs.nullifyThenRemoveEntry(disaster, this.disasterUrl).subscribe(() => (error: any) => console.log(error))
+    this.dhs.nullifyThenRemoveEntry(disaster, this.disasterUrl).subscribe({
+      error: error => console.log(error)
+    })
   }
 
   // collect all keys and push to finalObject and return it

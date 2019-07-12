@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, OnInit } from '@angular/core'
 import { IWorkflowContainer } from './models/workflows/workflow-container.model'
 import { StepType } from './models/workflows/workflow-step.model'
 import { IWorkflowTrend } from './models/workflow-trend.model'
@@ -11,7 +11,7 @@ import { tap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
 
 @Injectable()
-export class HaniService extends HttpService implements OnDestroy {
+export class HaniService extends HttpService implements OnInit, OnDestroy {
   constructor(protected http: HttpClient, public auth: AuthService) {
     super(http, auth)
   }
@@ -25,6 +25,9 @@ export class HaniService extends HttpService implements OnDestroy {
   public trendingUrl = 'trending'
   private bugUrl = 'bug'
   private trendingSubscription: Subscription
+  private commandSubscription: Subscription
+  private workflowSubscription: Subscription
+  public timeID: number
   private workflowComplete: IWorkflowOption = {
     step: ['Q', 0, null],
     label: 'Complete',
@@ -53,6 +56,13 @@ export class HaniService extends HttpService implements OnDestroy {
   public get departments() {
     return this.departmentList
   }
+
+  public set departments(departments) {
+    if (departments) {
+      this.departmentList = departments
+    }
+  }
+
   public get completeWorkflow() {
     return this.workflowComplete
   }
@@ -68,9 +78,11 @@ export class HaniService extends HttpService implements OnDestroy {
     step: StepType,
     workflowTrendArray: Array<IWorkflowTrend>
   ) {
-    const date = Date.now()
-    const workflowName = workflow.workflowName
-    workflowTrendArray.push({ workflow: workflowName, step, date })
+    if (step && workflow && workflowTrendArray) {
+      const date = Date.now()
+      const workflowName = workflow.workflowName
+      workflowTrendArray.push({ workflow: workflowName, step, date })
+    }
   }
 
   public replaceArray(array: [string, string]) {
@@ -89,8 +101,9 @@ export class HaniService extends HttpService implements OnDestroy {
         objToSearch = this.switch
         break
       }
-      default: console.log('Something broke in HaniService.replaceArray()')
-  }
+      default:
+        console.log('Something broke in HaniService.replaceArray()')
+    }
     return objToSearch[keyToFind]
   }
 
@@ -113,19 +126,42 @@ export class HaniService extends HttpService implements OnDestroy {
             }
             default: {
               console.log('Something broke in HaniService.getCommands()')
-              }
+            }
           }
         })
       })
     )
   }
 
+  public getWorkflowList(): IWorkflowDepartment[] {
+    let departmentList: IWorkflowDepartment[]
+    this.workflowSubscription = this.getWorkflows().subscribe({
+      error: error => {
+        console.log(error)
+        this.unsubscribeFrom(this.workflowSubscription)
+      },
+      next: departments => {
+        this.unsubscribeFrom(this.workflowSubscription)
+        this.departments = departments as IWorkflowDepartment[]
+        departmentList = departments
+      }
+    })
+    return departmentList
+  }
+
+  getCommandList() {
+    this.commandSubscription = this.getCommands().subscribe({
+      next: () => {},
+      complete: () => this.unsubscribeFrom(this.commandSubscription),
+      error: error => {
+        this.unsubscribeFrom(this.commandSubscription)
+        console.log(error)
+      }
+    })
+  }
+
   public getWorkflows() {
-    return this.getEntry(this.workflowUrl).pipe(
-      tap(departments => {
-        this.departmentList = departments
-      })
-    )
+    return this.getEntry(this.workflowUrl)
   }
 
   public postBugs(bugReport: string) {
@@ -136,9 +172,16 @@ export class HaniService extends HttpService implements OnDestroy {
   public postTracking(workflowTrendArray) {
     return this.postEntry(this.trendingUrl, {
       trending: workflowTrendArray,
-      user: { firstName: this.auth.firstName, lastName: this.auth.lastName }
+      user: { firstName: this.auth.firstName, lastName: this.auth.lastName },
+      timeID: this.timeID
     })
   }
+
+  public unsubscribeFrom(subscription: Subscription) {
+    subscription.unsubscribe()
+  }
+
+  ngOnInit() {}
 
   ngOnDestroy() {
     if (this.trendingSubscription) {

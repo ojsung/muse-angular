@@ -18,18 +18,22 @@ export class DisasterInfoComponent implements OnInit, OnDestroy {
   constructor(private dhs: DisasterHttpService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.routeParam = this.route.params.subscribe(params => {
-      this.id = params._id
-      this.dhs.getDisaster(this.id).subscribe(
-        disaster => {
-          this.disaster = disaster
-        },
-        error => (this.errorMessage = error as any)
-      )
+    this.routeParam = this.route.params.subscribe({
+      next: params => {
+        this.id = params._id
+        this.dhs.getDisaster(this.id).subscribe({
+          next: disaster => {
+            this.disaster = disaster
+          },
+          error: error => (this.errorMessage = error as any)
+        })
+      }
     })
     if (this.disaster.device !== 'SW.HU') {
-      this.dhs.getChildren(this.disaster.site).subscribe(children => {
-        this.children = children
+      this.dhs.getChildren(this.disaster.site).subscribe({
+        next: children => {
+          this.children = children
+        }
       })
     }
   }

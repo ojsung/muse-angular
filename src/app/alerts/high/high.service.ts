@@ -17,9 +17,10 @@ export class HighService {
   }
 
   setSubscription(control: AbstractControl, message: { str: string }): () => void {
-    this.subManager = control.valueChanges.subscribe(() => {
-      this.setMessage(control, message)
-
+    this.subManager = control.valueChanges.subscribe({
+      next: () => {
+        this.setMessage(control, message)
+      }
     })
 
     return function destroySub() {
@@ -28,14 +29,16 @@ export class HighService {
   }
 
   setValidation(summaryArray: Array<any>): void {
-    this.subManager = summaryArray[0].valueChanges.subscribe(value => {
-      this.validationChanger(summaryArray, value)
-      summaryArray[1].updateValueAndValidity()
+    this.subManager = summaryArray[0].valueChanges.subscribe({
+      next: value => {
+        this.validationChanger(summaryArray, value)
+        summaryArray[1].updateValueAndValidity()
+      }
     })
   }
 
   validationChanger(summaryArray: Array<any>, value) {
-    if (value === 'Other' ) {
+    if (value === 'Other') {
       summaryArray[1].setValidators(Validators.required)
     } else {
       summaryArray[1].clearValidators()

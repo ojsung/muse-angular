@@ -35,12 +35,12 @@
               <th colspan="9" (click)="expandRow(i)">
                 <i
                   style="margin-right: 2px"
-                  class="fa fa-plus-square-o"
+                  class="icon-plus-squared-alt"
                   *ngIf="i != expandedIndex"
                 ></i>
                 <i
                   style="margin-right: 2px"
-                  class="fa fa-minus-square"
+                  class="icon-minus-squared-alt"
                   *ngIf="i === expandedIndex"
                 ></i>
                 {{ obj[0] }}
@@ -57,17 +57,16 @@
                     <td class="diz">{{ disaster.osTicket }}</td>
                     <td class="diz">{{ disaster.issueLabel }}</td>
                     <td class="diz">
-                      <button class="button biz">
-                        Summary <span class="tooltiptext">{{ disaster.outageSummary }}</span>
-                      </button>
+                        <i class="icon-help-circled">
+                          <span class="tooltiptext">{{ disaster.outageSummary }}</span>
+                        </i>
                     </td>
                     <td class="diz">{{ disaster.maintenanceETA }}</td>
                     <td class="diz">{{ disaster.customerCount }}</td>
                     <td class="diz">
-                      <button class="button biz">
-                        Message
-                        <span class="tooltiptext">{{ disaster.acknowledgement }}</span>
-                      </button>
+                      <i class="icon-help-circled"
+                        ><span class="tooltiptext">{{ disaster.acknowledgement }}</span>
+                      </i>
                     </td>
                     <td class="diz" *ngIf="this.authorized">
                       <button class="button biz" (click)="this.removeDisaster(disaster)">
@@ -75,14 +74,13 @@
                       </button>
                     </td>
                     <td class="diz" *ngIf="!this.authorized">
-                      <button class="button biz">
-                        Script
-                        <span class="tooltiptext"
+                      <i class="icon-help-circled"
+                        ><span class="tooltiptext"
                           >There is currently a small-scale outage affecting your home. We apologize
                           for the inconvenience. Our technicians are on-site and internet will
                           return shortly.</span
                         >
-                      </button>
+                      </i>
                     </td>
                   </tr>
                 </table>
@@ -92,9 +90,18 @@
           <div style="height:50vh"></div>
         </tbody>
       </table>
-      <div class="card-body" *ngIf="!retrievedDisasters || !retrievedDisasters.length">
-        No Alerts to Display (Auto-refreshes Every 15s)
-      </div>
+      <ng-container *ngIf="this.authenticated">
+        <div class="card-body" *ngIf="!retrievedDisasters || !retrievedDisasters.length">
+          No Alerts to Display (Auto-refreshes Every 15s)
+        </div>
+      </ng-container>
+      <span *ngIf="!this.authenticated" class="card-body">
+        Log in to view outages.
+      </span>
+      <span *ngIf="sayRefresh" class="card-body">
+        If you have verified your login credentials, and are properly logged in, please refresh your
+        browser.
+      </span>
     </div>
   </div>
 </div>

@@ -76,3 +76,8 @@ input {
   color:blue;
   text-decoration:underline;
 }
+
+.w3-bar {
+  width: 100%;
+  overflow: hidden;
+}

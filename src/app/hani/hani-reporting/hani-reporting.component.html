@@ -6,7 +6,13 @@
       then clear, their database of all reporting info. Only click the button if you're absolutely
       sure you want to retrieve and clear the reporting data for Hani.
     </p>
+    <label for="name">What is your name?</label>
+    <input id="name" [(ngModel)]="nameInput" (click)="setError()"/>
+    <ng-container *ngIf="nameInput==='Isaac'">
     <button class="btn btn-danger" (click)="sendToSheets()" *ngIf="!tableState">I Am Sure</button>
+  </ng-container>
+  <br/>
+  <em style="color:red" *ngIf="nameInput!=='Isaac' && touched">You are not authorized to pull this report.</em>
     <textarea [(ngModel)]="csv" *ngIf="tableState"></textarea>
     <!-- <table *ngIf="tableState">
       <tr *ngFor="let trend of trendingResults">

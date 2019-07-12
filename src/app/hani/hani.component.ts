@@ -41,8 +41,6 @@ export class HaniComponent implements OnInit, OnDestroy {
   private cpeIPControl: AbstractControl
   private autoboxControl: AbstractControl
   private workflowTrendArray: Array<IWorkflowTrend> = []
-  private commandSubscription: Subscription
-  private workflowSubscription: Subscription
   private trackingSubscription: Subscription
   private initialWorkflow: string
   public showTextBox = false
@@ -59,18 +57,12 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   public get departments(): IWorkflowDepartment[] {
-    const departmentList = this.hs.departments
-    if (departmentList) {
-      return departmentList
-    } else {
-      this.workflowSubscription = this.hs
-        .getWorkflows()
-        .subscribe(() => this.workflowSubscription.unsubscribe())
-      this.commandSubscription = this.hs
-        .getCommands()
-        .subscribe(() => this.commandSubscription.unsubscribe())
-      return this.hs.departments
+    let departmentList = this.hs.departments
+    if (!departmentList) {
+      departmentList = this.hs.getWorkflowList()
+      this.hs.getCommandList()
     }
+    return departmentList
   }
 
   private get containerLength(): number {
@@ -114,20 +106,24 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.cpeMACControl = this.siForm.get('cpeMAC')
     this.cpeIPControl = this.siForm.get('cpeIP')
     this.autoboxControl = this.siForm.get('autobox')
+
+    this.hs.timeID = Date.now()
   }
 
   ngOnDestroy() {
     // because the subscription is only created if this.departments is empty,
     // it is possible to create and destroy Hani without creating a subscription
     // in cases where no sub was made, there will be nothing to destroy.
-    if (this.commandSubscription) {
-      this.commandSubscription.unsubscribe()
-      this.workflowSubscription.unsubscribe()
-    }
 
     if (this.workflowTrendArray) {
-      this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe(() => {
-        this.trackingSubscription.unsubscribe()
+      this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe({
+        error: error => {
+          this.trackingSubscription.unsubscribe()
+          console.log(error)
+        },
+        next: () => {
+          this.trackingSubscription.unsubscribe()
+        }
       })
     }
   }
@@ -171,6 +167,13 @@ export class HaniComponent implements OnInit, OnDestroy {
         break
       }
     }
+
+    // next, update the trend tracker
+    this.hs.gatherWorkflowTrend(
+      this.chosenWorkflowContainer,
+      this.currentWorkflow.step,
+      this.workflowTrendArray
+    )
 
     if (this.infoData.what instanceof Array) {
       this.infoData.what = this.hs.replaceArray(this.infoData.what)
@@ -231,6 +234,7 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   public clearDepartmentAndWorkflow() {
+    this.initialWorkflow = null
     this.currentDepartment = null
     this.workflowContainersInDepartment = []
     this.clearCurrentWorkflow()
@@ -247,11 +251,18 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.sendToServer()
     this.clearDepartmentAndWorkflow()
     this.siForm.reset()
+    this.hs.timeID = Date.now()
   }
 
   private sendToServer() {
-    this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe(() => {
-      this.trackingSubscription.unsubscribe()
+    this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe({
+      complete: () => {
+        this.trackingSubscription.unsubscribe()
+      },
+      error: error => {
+        this.trackingSubscription.unsubscribe()
+        console.log(error)
+      }
     })
   }
 
@@ -259,12 +270,6 @@ export class HaniComponent implements OnInit, OnDestroy {
   // this will be called either once the t1 is already in a workflow
   // or when they choose their first workflow
   public trackAndSelectWorkflow(index?: number, workflowBegin?: StepType) {
-    this.hs.gatherWorkflowTrend(
-      this.chosenWorkflowContainer,
-      this.currentWorkflow.step,
-      this.workflowTrendArray
-    )
-
     let chosenIndexOptions: any
     chosenIndexOptions = this.checkSource(index, chosenIndexOptions)
     const chosenIndexStep = this.findChosenStep(chosenIndexOptions, index, workflowBegin)
