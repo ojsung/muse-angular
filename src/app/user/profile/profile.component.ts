@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../auth.service'
 import { Router } from '@angular/router'
 import { restrictedWords } from '../../shared/restricted-words.validator'
-import { IUser } from '../user.model';
+import { IUser } from '../user.model'
 
 @Component({
   selector: 'cher-profile',
@@ -21,27 +21,99 @@ export class ProfileComponent implements OnInit {
     return this.profileForm.value
   }
 
-  constructor(
-    private auth: AuthService,
-    private router: Router
-  ) { }
+  constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.currentUser = this.auth.getCurrentUser()
-    this.firstName = new FormControl(
-      this.currentUser.firstName, [
-        Validators.required, Validators.pattern('[a-zA-Z].*'), restrictedWords
-      ]
-      )
-    this.lastName = new FormControl(
-      this.currentUser.lastName, [
-        Validators.required, Validators.pattern('[a-zA-Z].*'), restrictedWords([
-          'anal', 'anus', 'arse', 'ass', 'ballsack', 'balls', 'bastard', 'bitch', 'biatch', 'bloody', 'blowjob', 'blow job', 'bollock', 'bollok', 'boner', 'boob', 'bugger', 'bum', 'butt', 'buttplug', 'clitoris', 'cock', 'coon', 'crap', 'cunt', 'damn', 'dick', 'dildo', 'dyke', 'fag', 'feck', 'fellate', 'fellatio', 'felching', 'fuck', 'f u c k', 'fudgepacker', 'fudge packer', 'flange', 'Goddamn', 'God damn', 'hell', 'homo', 'jerk', 'jizz', 'knobend', 'knob end', 'labia', 'lmao', 'lmfao', 'muff', 'nigger', 'nigga', 'omg', 'penis', 'piss', 'poop', 'prick', 'pube', 'pussy', 'queer', 'scrotum', 'sex', 'shit', 's hit', 'sh1t', 'slut', 'smegma', 'spunk', 'tit', 'tosser', 'turd', 'twat', 'vagina', 'wank', 'whore', 'wtf'
-        ])
+    this.firstName = new FormControl(this.currentUser.firstName, [
+      Validators.required,
+      Validators.pattern('[a-zA-Z].*'),
+      restrictedWords
+    ])
+    this.lastName = new FormControl(this.currentUser.lastName, [
+      Validators.required,
+      Validators.pattern('[a-zA-Z].*'),
+      restrictedWords([
+        'anal',
+        'anus',
+        'arse',
+        'ass',
+        'ballsack',
+        'balls',
+        'bastard',
+        'bitch',
+        'biatch',
+        'bloody',
+        'blowjob',
+        'blow job',
+        'bollock',
+        'bollok',
+        'boner',
+        'boob',
+        'bugger',
+        'bum',
+        'butt',
+        'buttplug',
+        'clitoris',
+        'cock',
+        'coon',
+        'crap',
+        'cunt',
+        'damn',
+        'dick',
+        'dildo',
+        'dyke',
+        'fag',
+        'feck',
+        'fellate',
+        'fellatio',
+        'felching',
+        'fuck',
+        'f u c k',
+        'fudgepacker',
+        'fudge packer',
+        'flange',
+        'Goddamn',
+        'God damn',
+        'hell',
+        'homo',
+        'jerk',
+        'jizz',
+        'knobend',
+        'knob end',
+        'labia',
+        'lmao',
+        'lmfao',
+        'muff',
+        'nigger',
+        'nigga',
+        'omg',
+        'penis',
+        'piss',
+        'poop',
+        'prick',
+        'pube',
+        'pussy',
+        'queer',
+        'scrotum',
+        'sex',
+        'shit',
+        's hit',
+        'sh1t',
+        'slut',
+        'smegma',
+        'spunk',
+        'tit',
+        'tosser',
+        'turd',
+        'twat',
+        'vagina',
+        'wank',
+        'whore',
+        'wtf'
       ])
-    this.password = new FormControl(
-      null
-    )
+    ])
+    this.password = new FormControl(null)
     this.profileForm = new FormGroup({
       firstName: this.firstName,
       lastName: this.lastName,
@@ -55,24 +127,32 @@ export class ProfileComponent implements OnInit {
   saveProfile() {
     if (this.profileForm.valid) {
       if (this.formValues.password) {
-        this.updatePassword(this.formValues.password)
+        // this.updatePassword(this.formValues.password)
       }
-      this.auth.updateCurrentUser(this.formValues.firstName, this.formValues.lastName, this.formValues.password)
-      .subscribe(() => {
-        console.log('successfully saved')
-      })
+      this.auth
+        .updateCurrentUser(
+          this.formValues.firstName,
+          this.formValues.lastName,
+          this.formValues.password
+        )
+        .subscribe({
+          complete: () => {
+            console.log('successfully saved')
+          }
+        })
     }
   }
   validateFirstName() {
-    return this.profileForm.controls.firstName.valid || this.profileForm.controls.firstName.untouched
+    return (
+      this.profileForm.controls.firstName.valid || this.profileForm.controls.firstName.untouched
+    )
   }
 
   validateLastName() {
     return this.profileForm.controls.lastName.valid || this.profileForm.controls.lastName.untouched
   }
 
-  updatePassword(password: string) {
-    this.auth.updatePassword(password)
-  }
-
+  // updatePassword(password: string) {
+  //   this.auth.updatePassword(password)
+  // }
 }

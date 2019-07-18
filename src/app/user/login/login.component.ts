@@ -22,11 +22,13 @@ export class LoginComponent implements OnInit {
       formValues.userName,
       formValues.password
       )
-      .subscribe(resp => {
-        if (!resp) {
-          this.loginInvalid = true
-        } else {
-          this.router.navigate(['welcome'])
+      .subscribe({
+        next: resp => {
+          if (!resp) {
+            this.loginInvalid = true
+          } else {
+            this.router.navigate(['welcome'])
+          }
         }
       })
   }

@@ -8,9 +8,23 @@ import { Component, OnInit } from '@angular/core'
 export class WelcomeComponent implements OnInit {
   pageTitle = 'Cher'
 
-  constructor() { }
+  private rSysArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-  ngOnInit() {
+  public get rSys() {
+    return !this.rSysArray.includes(0, 0)
   }
 
+  public setRSys(i: number) {
+    this.rSysArray[i] = 1
+    this.logCount()
+  }
+
+  private logCount() {
+    const sum = this.rSysArray.reduce((a, b) => a + b, 0)
+    console.log(17 - sum + ' remaining')
+  }
+
+  constructor() {}
+
+  ngOnInit() { }
 }

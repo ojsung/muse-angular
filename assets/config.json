@@ -35,6 +35,18 @@
       "css": "angle-circled-down",
       "code": 61754,
       "src": "fontawesome"
+    },
+    {
+      "uid": "17ebadd1e3f274ff0205601eef7b9cc4",
+      "css": "help-circled",
+      "code": 59392,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "c53415fbd2695033bd7180d7a9ed4934",
+      "css": "rebel",
+      "code": 61904,
+      "src": "fontawesome"
     }
   ]
 }

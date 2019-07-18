@@ -56,9 +56,10 @@ export class AuthService {
     return this.http.put(`/api/user/${this.currentUser._id}`, { ...this.currentUser, password }, this.options)
   }
 
-  public updatePassword(password: string) {
+  // Need to eventually implement a way to change passwords. But for now, I don't trust my security enough.
+  // public updatePassword(password: string) {
 
-  }
+  // }
 
   public isAuthenticated() {
     return !!localStorage.getItem(this.TOKEN_KEY)

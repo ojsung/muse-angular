@@ -12,14 +12,14 @@ export class UserComponent implements OnInit {
 
   users: IUser[] = []
   errorMessage: string
-  constructor( private userService: UserService ) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
-    this.userService.getUsers().subscribe(
-      users => {
+    this.userService.getUsers().subscribe({
+      next: users => {
         this.users = users
       },
-      error => this.errorMessage = error as any
-    )
+      error: error => (this.errorMessage = error)
+    })
   }
 }
