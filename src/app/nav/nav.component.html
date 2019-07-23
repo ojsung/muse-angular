@@ -1,11 +1,12 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark">
   <div class="row" style="margin-left:5px; text-align: center">
     <a class="navbar-brand"  [routerLink]="['/welcome']">{{ pageTitle }}</a>
-    <a class="nav-link" [routerLink]="['/alerts/disaster']">Disaster</a>
+    <ng-container *ngIf="auth.isAuthenticated()"><a class="nav-link" [routerLink]="['/alerts/disaster']">Disaster</a>
     <a class="nav-link" [routerLink]="['/alerts/high']">High</a>
-    <a class="nav-link" [routerLink]="['/hani/reporting']" *ngIf="this.auth.checkAuthLevel()">Reporting</a>
+    <a class="nav-link" [routerLink]="['/hani/reporting']" *ngIf="this.auth.userType < 3">Reporting</a>
     <cher-hani-modal></cher-hani-modal>
     <!-- <a class="nav-link" [routerLink]="['/hani']">Hani</a> -->
+  </ng-container>
     <a
       *ngIf="!auth.isAuthenticated()"
       class="nav-link"

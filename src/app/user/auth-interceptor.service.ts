@@ -5,6 +5,7 @@ import { AuthService } from './auth.service'
 @Injectable({
   providedIn: 'root'
 })
+  // just used to set the proper headers for any http call made
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(private injector: Injector ) {}
   intercept(req, next) {

@@ -6,35 +6,12 @@
       then clear, their database of all reporting info. Only click the button if you're absolutely
       sure you want to retrieve and clear the reporting data for Hani.
     </p>
-    <label for="name">What is your name?</label>
-    <input id="name" [(ngModel)]="nameInput" (click)="setError()"/>
-    <ng-container *ngIf="nameInput==='Isaac'">
-    <button class="btn btn-danger" (click)="sendToSheets()" *ngIf="!tableState">I Am Sure</button>
-  </ng-container>
-  <br/>
-  <em style="color:red" *ngIf="nameInput!=='Isaac' && touched">You are not authorized to pull this report.</em>
+    <label for="name">Are you sure you want to pull this report? (type "Yes")</label>
+    <input id="name" [(ngModel)]="nameInput" (click)="setError()" />
+    <ng-container *ngIf="nameInput === 'Yes'">
+      <button class="btn btn-danger" (click)="deliverAsCsv()" *ngIf="!tableState">I Am Sure</button>
+    </ng-container>
+    <br />
     <textarea [(ngModel)]="csv" *ngIf="tableState"></textarea>
-    <!-- <table *ngIf="tableState">
-      <tr *ngFor="let trend of trendingResults">
-        <td>
-          <ul style="list-style: none">
-            <li>{{ trend.user.firstName }} {{ trend.user.lastName }}</li>
-            <li>{{trend.trending[0].workflow}}</li>
-          </ul>
-        </td>
-        <td>
-          <ul style="list-style: none">
-            <li>Step</li>
-            <li>Timestamp</li>
-          </ul>
-        </td>
-        <td *ngFor="let datum of trend.trending">
-          <ul style="list-style: none">
-            <li>{{ datum.step }}</li>
-            <li>{{ datum.date }}</li>
-          </ul>
-        </td>
-      </tr>
-    </table> -->
   </div>
 </div>

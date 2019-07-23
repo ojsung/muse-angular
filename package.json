@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -o",
+    "start": "ng serve -o --port 3000",
     "build": "ng build",
     "test": "ng test",
     "lint": "eslint .",
@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "8.1.1",
     "@angular/router": "8.1.1",
     "core-js": "^2.5.4",
+    "ngx-socket-io": "2.1.1",
     "npm": "6.10.0",
     "rxjs": "~6.5.2",
     "tslib": "1.10.0",

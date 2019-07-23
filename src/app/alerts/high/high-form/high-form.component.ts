@@ -80,6 +80,7 @@ export class HighFormComponent implements OnInit, OnDestroy {
       this.hs.setSubscription(controlArray[0], controlArray[1])
     })
 
+    // watch the summary field.  If no fields require it to be required, then it is optional
     this.summaryWatcher = this.summaryControl.statusChanges.subscribe({
       next: value => {
         if (value === 'VALID') {

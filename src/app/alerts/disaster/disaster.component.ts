@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { IDisaster } from './disaster.model'
 import { DisasterService } from './disaster-services/disaster.service'
-import { timer, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { DisasterHttpService } from './disaster-services/disaster-http.service'
 import { DisasterEventEmitterService } from './disaster-services/disaster-event-emitter.service'
 import { DisasterFilterService } from './disaster-services/disaster-filter.service'
+import { AlertsSocketService } from '../alerts-socket.service'
 
 @Component({
   selector: 'cher-disaster',
@@ -16,19 +17,16 @@ export class DisasterComponent implements OnInit, OnDestroy {
   public pageTitle = 'Disaster Alerts'
   public showDetail = false
   public expandedIndex: number
-  public authorized = this.dhs.auth.checkAuthLevel()
-  public authenticated = this.dhs.auth.isAuthenticated()
+  public authLevel = this.dhs.auth.userType
   public retrievedDisasters: IDisaster[] = []
   public displayedArray = []
   private filteredDisasters: IDisaster[]
   private finalArray = []
   private eventSubscription: Subscription
-  private disasterSubscription: Subscription
-  private subscription
-  private timer
   private disasterUrl = 'events'
   private errorMessage: any
   public sayRefresh = false
+  private eventsSocket: Subscription
 
   // retrieve list filter (if any) from the html.  Also tslint is dumb and doesn't like my variable name
   /* tslint:disable:variable-name */
@@ -44,15 +42,18 @@ export class DisasterComponent implements OnInit, OnDestroy {
     this.checkAndUpdateFilter()
   }
 
+  // again, the naming for the Alerts Socket Service here is a bit unfortunate.
+  // But for readability's sake, I will keep with convention
   constructor(
-    private disasterService: DisasterService,
+    private ds: DisasterService,
     private dhs: DisasterHttpService,
-    private des: DisasterEventEmitterService,
-    private dfs: DisasterFilterService
+    private dees: DisasterEventEmitterService,
+    private dfs: DisasterFilterService,
+    private ass: AlertsSocketService
   ) {
     // begin subscribing to disasterService's filtering now that this page is now loaded
     // this will start getting the listfilter and any outages that match the filter
-    this.eventSubscription = this.des.getEventEmitter().subscribe({
+    this.eventSubscription = this.dees.getEventEmitter().subscribe({
       next: bool => {
         if (bool === true) {
           this.checkAndUpdateFilter()
@@ -62,34 +63,30 @@ export class DisasterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Cher will only ask for updates every 15s
-    this.timer = timer(0, 15000)
-    this.subscription = this.timer.subscribe({
-      next: x => {
-        this.disasterSubscription = this.dhs.getEntry(this.disasterUrl).subscribe({
-          next: disasters => {
-            this.retrievedDisasters = disasters
-            this.filteredDisasters = disasters
-            this.finalArray = this.arrayToObjArray(this.filteredDisasters)
+    // start by notifying the server that we want the events
+    this.ass.requestEntry('events')
 
-            // Tell Cher to start the process to check and update the list filter
-            this.des.emitBoolean(true)
-          },
-          error: error => {
-            this.errorMessage = error as any
-            console.log(this.errorMessage)
-            this.sayRefresh = true
-            this.disasterSubscription.unsubscribe()
-            this.subscription.unsubscribe()
-          }
-        })
+    // once events have arrived, subscribe to them
+    this.eventsSocket = this.ass.receiveEntry('events').subscribe({
+      next: disasters => {
+        this.retrievedDisasters = disasters
+        this.filteredDisasters = disasters
+        this.finalArray = this.arrayToObjArray(this.filteredDisasters)
+
+        // Tell Cher to start the process to check and update the list filter
+        this.dees.emitBoolean(true)
+      },
+      error: error => {
+        console.log(error)
+      },
+      complete: () => {
+        this.eventsSocket.unsubscribe()
       }
     })
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe()
-    this.eventSubscription.unsubscribe()
+    this.eventsSocket.unsubscribe()
   }
 
   public expandRow(index: number): void {
@@ -105,7 +102,7 @@ export class DisasterComponent implements OnInit, OnDestroy {
   // collect all keys and push to finalObject and return it
   private arrayToObjArray(disaster: IDisaster[]): any[] {
     const finalObject = {}
-    this.disasterService.keyCollection(disaster, finalObject)
+    this.ds.keyCollection(disaster, finalObject)
     return Object.entries(finalObject)
   }
 

@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { IHigh } from './high.model'
-import { timer, Observable, Subscription } from 'rxjs'
+import {  Subscription } from 'rxjs'
 import { HighHttpService } from './high-http.service'
+import { AlertsSocketService } from '../alerts-socket.service';
 
 @Component({
   selector: 'cher-high',
@@ -16,31 +17,21 @@ export class HighComponent implements OnInit, OnDestroy {
   public outArray: Array<IHigh>
   public highActive: Array<IHigh>
   public highInactive: Array<IHigh>
-  public authorized: boolean
+  public authLevel: number
   private highUrl = 'high'
-  private timer: Observable<number>
   private subscription: Subscription
   public authenticated = this.hhs.auth.firstName
 
-  constructor(private hhs: HighHttpService) {}
+  // there is some unfortunate naming here, but I would rather not break convention, since readability
+  // is more important here, and no client will ever know the name of the variable
+  constructor(private hhs: HighHttpService, private ass: AlertsSocketService) {}
 
   ngOnInit() {
-    this.timer = timer(0, 15000)
-    this.subscription = this.timer.subscribe({
-      next: () => {
-        this.getProblems()
-      }
-    })
+    this.authLevel = this.hhs.auth.userType
 
-    this.authorized = this.hhs.auth.checkAuthLevel()
-  }
+    this.ass.requestEntry('high')
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe()
-  }
-
-  private getProblems() {
-    return this.hhs.getEntry(this.highUrl).subscribe({
+    this.subscription = this.ass.receiveEntry('high').subscribe({
       next: problems => {
         this.outArray = problems as IHigh[]
         const activesArray: Array<IHigh> = []
@@ -54,8 +45,18 @@ export class HighComponent implements OnInit, OnDestroy {
         })
         this.highActive = activesArray
         this.highInactive = inactivesArray
+      },
+      error: error => {
+        console.log(error)
+      },
+      complete: () => {
+        this.subscription.unsubscribe()
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
   }
 
   public editProblem(alert: IHigh) {
@@ -66,7 +67,7 @@ export class HighComponent implements OnInit, OnDestroy {
   public removeProblem(alert) {
     this.findAndSwitch(alert, this.highActive, this.highInactive)
     this.hhs.nullifyThenRemoveEntry(alert, this.highUrl).subscribe({
-      next: error => console.log(error)
+      error: error => console.log(error)
     })
   }
 

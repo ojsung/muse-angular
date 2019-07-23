@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router'
 import { WelcomeComponent } from './welcome/welcome.component'
+import { RouteActivator } from './shared/route-activator.service'
 
 const routes: Routes = [
   { path: 'home', component: WelcomeComponent },
@@ -8,15 +9,21 @@ const routes: Routes = [
   { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
   {
     path: 'hani',
+    canActivate: [RouteActivator],
+    data: {minRole: 5},
     loadChildren: () => import('./hani/hani.module').then(m => m.HaniModule)
   },
-  {path: 'alerts',
-loadChildren: () => import ('./alerts/alerts.module').then(m => m.AlertsModule)},
+  {
+    path: 'alerts',
+    canActivate: [RouteActivator],
+    data: {minRole: 5},
+    loadChildren: () => import('./alerts/alerts.module').then(m => m.AlertsModule)
+  },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

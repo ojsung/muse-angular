@@ -9,6 +9,9 @@ import { tap, catchError } from 'rxjs/operators'
 @Injectable({
   providedIn: 'root'
 })
+
+  // extends the base alerts http service to specifically serve the disaster component
+  // because it extends the service, it is accessible even though disaster component is lazily loaded
 export class DisasterHttpService extends AlertsHttpService {
   private disasterUrl = 'api/events'
   constructor(protected http: HttpClient, public auth: AuthService) {
@@ -40,6 +43,7 @@ export class DisasterHttpService extends AlertsHttpService {
     )
   }
 
+  // when we need to remove an alert, nullify all the fields that declare it as active
   public nullifyThenRemoveEntry(entry: IDisaster, url: string): Observable<any> {
     this.nullifyKey(this.changedArray, entry)
     return this.removeEntry(entry, url)

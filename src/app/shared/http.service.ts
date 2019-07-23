@@ -4,8 +4,8 @@ import { Observable, throwError } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 
 export class HttpService {
-
-  protected incompleteUrl = 'api/'
+  // protected incompleteUrl = 'api/'
+  protected incompleteUrl = 'http://localhost:4200/api/'
   public headers = new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: `token ${this.auth.token}`

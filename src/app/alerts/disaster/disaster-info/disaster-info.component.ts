@@ -18,6 +18,7 @@ export class DisasterInfoComponent implements OnInit, OnDestroy {
   constructor(private dhs: DisasterHttpService, private route: ActivatedRoute) {}
 
   ngOnInit() {
+    // on initiation, subscribe to the disasters
     this.routeParam = this.route.params.subscribe({
       next: params => {
         this.id = params._id
@@ -38,6 +39,7 @@ export class DisasterInfoComponent implements OnInit, OnDestroy {
     }
   }
 
+  // on destroy, remove the sub to prevent memory leaks
   ngOnDestroy() {
     this.routeParam.unsubscribe()
   }

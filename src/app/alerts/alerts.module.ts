@@ -13,10 +13,7 @@ import { HighFormComponent } from './high/high-form/high-form.component'
     SharedModule,
     AlertsRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  exports: [
-    DisasterComponent
-  ]
 })
 export class AlertsModule { }

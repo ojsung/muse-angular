@@ -11,7 +11,9 @@ import { NavComponent } from './nav/nav.component'
 import { AuthInterceptorService } from './user/auth-interceptor.service'
 import { HaniModule } from './hani/hani.module'
 import 'zone.js'
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { NatalieModule } from './natalie/natalie.module'
+import { SocketIoModule,  } from 'ngx-socket-io'
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SharedModule,
     HttpClientModule,
     HaniModule,
-    NgbModule
+    NgbModule,
+    NatalieModule,
+    SocketIoModule,
   ],
   providers: [
     AuthService,
@@ -34,7 +38,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
       multi: true
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })

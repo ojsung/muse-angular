@@ -5,12 +5,14 @@ import { IHigh } from './high/high.model'
 import { IDisaster } from './disaster/disaster.model'
 import { HttpService } from '../shared/http.service';
 
+// The contents of this service are quite straightforward
 export class AlertsHttpService extends HttpService{
   private enabledArray = ['isDown', 'active']
   constructor(protected http: HttpClient, public auth: AuthService) {
     super(http, auth)
   }
 
+  // when passed a set of keys that need to be set to null, it will null them
   protected nullifyKey(keysToNullify: Array<string>, entry: IHigh | IDisaster) {
     for (const key in entry) {
       if (keysToNullify.indexOf(key) > -1) {

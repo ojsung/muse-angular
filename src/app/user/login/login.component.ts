@@ -21,14 +21,15 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(
       formValues.userName,
       formValues.password
-      )
+    )
+      // this doesn't quite work as expected.  Even on a failed login, you will be sent to the welcome page
+      // this will be fixed in the future, but is not a big priority right now
       .subscribe({
-        next: resp => {
-          if (!resp) {
-            this.loginInvalid = true
-          } else {
+        next: () => {
             this.router.navigate(['welcome'])
-          }
+        },
+        error: () => {
+          this.loginInvalid = true
         }
       })
   }

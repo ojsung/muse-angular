@@ -1,8 +1,9 @@
 export interface IAuthResponse {
   'token': string;
   'user': {
-    '_id': number,
-    'firstName': string,
-    'lastName': string
+    firstName: string;
+    lastName: string;
+    userName: string;
+    userType: string;
   };
 }

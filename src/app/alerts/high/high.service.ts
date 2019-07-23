@@ -16,6 +16,8 @@ export class HighService {
     minlength: 'Please enter valid information.'
   }
 
+  // for any controls that need to be watched, this can be used to watch the control and
+  // update the message when it needs to be changed
   setSubscription(control: AbstractControl, message: { str: string }): () => void {
     this.subManager = control.valueChanges.subscribe({
       next: () => {
@@ -28,6 +30,7 @@ export class HighService {
     }
   }
 
+  // updates the validation and the validation needs for a form field change
   setValidation(summaryArray: Array<any>): void {
     this.subManager = summaryArray[0].valueChanges.subscribe({
       next: value => {

@@ -27,7 +27,10 @@ export class HaniReportingComponent implements OnInit, OnDestroy {
     }
   }
 
-  public sendToSheets() {
+  // I don't feel comfortable creating downloadables on Cher since Cher is not hosted internally
+  // I would need to import some dependencies, and they would introduce vulnerabilities
+  // because of this, the reporting data will be delivered as a CSV on-screen instead
+  public deliverAsCsv() {
     this.tableState = true
     this.trendingSubscription = this.hs.getEntry(this.hs.trendingUrl).subscribe({
       next: trending => {

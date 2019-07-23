@@ -14,6 +14,9 @@ export class UserComponent implements OnInit {
   errorMessage: string
   constructor(private userService: UserService) {}
 
+  // eventually, this will do more.  It will be used by managers to manage users and profiles.
+  // However, right now it just reports the different usernames.
+  // it's not a big priority right now though, since I can manage http calls through Postman
   ngOnInit() {
     this.userService.getUsers().subscribe({
       next: users => {

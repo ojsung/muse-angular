@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private auth: AuthService, private router: Router) {}
 
+  // will eventually be used to edit a profile, but is not currently working
   ngOnInit() {
     this.currentUser = this.auth.getCurrentUser()
     this.firstName = new FormControl(this.currentUser.firstName, [

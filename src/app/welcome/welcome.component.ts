@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'cher-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css']
 })
+
+  // there may or may not be easter eggs on this page.  I plead the fifth
 export class WelcomeComponent implements OnInit {
   pageTitle = 'Cher'
 
@@ -25,6 +28,6 @@ export class WelcomeComponent implements OnInit {
   }
 
   constructor() {}
-
-  ngOnInit() { }
+  ngOnInit() {
+  }
 }
