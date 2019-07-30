@@ -65,7 +65,7 @@ export class HighComponent implements OnInit, OnDestroy {
   }
 
   public removeProblem(alert) {
-    this.findAndSwitch(alert, this.highActive, this.highInactive)
+    this.removeFromArray(alert, this.highActive)
     this.hhs.nullifyThenRemoveEntry(alert, this.highUrl).subscribe({
       error: error => console.log(error)
     })
@@ -73,7 +73,7 @@ export class HighComponent implements OnInit, OnDestroy {
 
   public addProblem(alert: IHigh) {
     alert.active = true
-    this.findAndSwitch(alert, this.highInactive, this.highActive)
+    this.removeFromArray(alert, this.highInactive)
     this.hhs.clearIdAndPost(this.highUrl, alert).subscribe({
       error: error => console.log(error)
     })
@@ -87,9 +87,8 @@ export class HighComponent implements OnInit, OnDestroy {
     this.inactiveToggle = !this.inactiveToggle
   }
 
-  private findAndSwitch(alert, removeArray, addArray) {
-    const removeIndex = removeArray.indexOf(alert)
-    removeArray.splice(removeIndex, 1)
-    addArray.push(alert)
+  private removeFromArray(alert, arrayToClear) {
+    const removeIndex = arrayToClear.indexOf(alert)
+    arrayToClear.splice(removeIndex, 1)
   }
 }

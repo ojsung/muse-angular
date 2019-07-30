@@ -9,7 +9,7 @@ import { of } from 'rxjs'
   providedIn: 'root'
 })
 
-  // this service is the most reused code in this application.
+// this service is the most reused code in this application.
 export class AuthService {
   private currentUser: IUser
   constructor(private http: HttpClient) {}
@@ -22,7 +22,7 @@ export class AuthService {
   private TYPE_KEY = 'userType'
   private options = {
     headers: new HttpHeaders({
-      "Content-type": 'application/json'
+      'Content-type': 'application/json'
     })
   }
   private roleHierarchy = {
