@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { IHigh } from './high.model'
-import {  Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { HighHttpService } from './high-http.service'
-import { AlertsSocketService } from '../alerts-socket.service';
+import { AlertsSocketService } from '../alerts-socket.service'
 
 @Component({
   selector: 'cher-high',
