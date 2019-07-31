@@ -1,0 +1,24 @@
+table {
+  table-layout:auto;
+  width: 100%;
+  padding: 10px;
+  margin: 10px
+}
+
+.flexr {
+  display: flex;
+  flex-direction: row
+}
+
+.flexc {
+  display: flex;
+  flex-direction: column
+}
+
+table, th, td {
+  border: 1px solid black
+}
+
+.greenFocus:focus {
+  border: 1px solid green
+}

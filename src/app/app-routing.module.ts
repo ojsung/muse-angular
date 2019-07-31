@@ -19,6 +19,12 @@ const routes: Routes = [
     data: {minRole: 5},
     loadChildren: () => import('./alerts/alerts.module').then(m => m.AlertsModule)
   },
+  {
+    path: 'eva',
+    canActivate: [RouteActivator],
+    data: {minRole: 4},
+    loadChildren: () => import('./eva/eva.module').then(m => m.EvaModule)
+  },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ]
 

@@ -21,7 +21,7 @@ export class DisasterComponent implements OnInit, OnDestroy {
   public retrievedDisasters: IDisaster[] = []
   public displayedArray = []
   private filteredDisasters: IDisaster[]
-  private finalArray = []
+  private objArray = []
   private eventSubscription: Subscription
   private disasterUrl = 'events'
   private errorMessage: any
@@ -30,7 +30,7 @@ export class DisasterComponent implements OnInit, OnDestroy {
 
   // retrieve list filter (if any) from the html.  Also tslint is dumb and doesn't like my variable name
   /* tslint:disable:variable-name */
-  _listFilter: string
+  private _listFilter: string
   /* tslint:enable:variable-name */
   get listFilter(): string {
     return this._listFilter
@@ -71,7 +71,7 @@ export class DisasterComponent implements OnInit, OnDestroy {
       next: disasters => {
         this.retrievedDisasters = disasters
         this.filteredDisasters = disasters
-        this.finalArray = this.arrayToObjArray(this.filteredDisasters)
+        this.objArray = this.arrayToObjArray(this.filteredDisasters)
 
         // Tell Cher to start the process to check and update the list filter
         this.dees.emitBoolean(true)
@@ -108,7 +108,7 @@ export class DisasterComponent implements OnInit, OnDestroy {
 
   private checkAndUpdateFilter() {
     this.displayedArray = this.listFilter
-      ? this.dfs.performFilter(this.listFilter, this.finalArray)
-      : this.finalArray
+      ? this.dfs.performFilter(this.listFilter, this.objArray)
+      : this.objArray
   }
 }

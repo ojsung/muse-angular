@@ -12,7 +12,7 @@ import { AuthInterceptorService } from './user/auth-interceptor.service'
 import { HaniModule } from './hani/hani.module'
 import 'zone.js'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-import { NatalieModule } from './natalie/natalie.module'
+import { EvaModule } from './eva/eva.module'
 import { SocketIoModule,  } from 'ngx-socket-io'
 
 @NgModule({
@@ -28,7 +28,7 @@ import { SocketIoModule,  } from 'ngx-socket-io'
     HttpClientModule,
     HaniModule,
     NgbModule,
-    NatalieModule,
+    EvaModule,
     SocketIoModule,
   ],
   providers: [

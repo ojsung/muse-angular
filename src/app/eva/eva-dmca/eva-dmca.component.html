@@ -1,0 +1,15 @@
+<table>
+  <tbody>
+    <tr>
+      <th>Azotel ID</th>
+      <th>Azotel Name</th>
+      <th>Infraction Count</th>
+      <th>CPE MAC</th>
+      <th>Router MAC</th>
+      <th>Email Sent</th>
+      <th>Infraction Date</th>
+      <th>Infraction History</th>
+    </tr>
+    <tr class="greenFocus" *ngFor="let offender of offenders; let i=index" (focus)='focus(i)'></tr>
+  </tbody>
+</table>

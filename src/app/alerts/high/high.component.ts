@@ -15,12 +15,24 @@ export class HighComponent implements OnInit, OnDestroy {
   public inactiveToggle = false
   public high: IHigh
   public outArray: Array<IHigh>
-  public highActive: Array<IHigh>
-  public highInactive: Array<IHigh>
+  private highActive: Array<IHigh>
+  private highInactive: Array<IHigh>
   public authLevel: number
   private highUrl = 'high'
   private subscription: Subscription
   public authenticated = this.hhs.auth.firstName
+  public get actives(): Array<IHigh> {
+    return this.highActive
+  }
+  public set actives(activeArray: Array<IHigh>) {
+    this.highActive = activeArray
+  }
+  public get inactives(): Array<IHigh> {
+    return this.highInactive
+  }
+  public set inactives(inactiveArray: Array<IHigh>) {
+    this.highInactive = inactiveArray
+  }
 
   // there is some unfortunate naming here, but I would rather not break convention, since readability
   // is more important here, and no client will ever know the name of the variable
@@ -43,8 +55,8 @@ export class HighComponent implements OnInit, OnDestroy {
             inactivesArray.push(entry)
           }
         })
-        this.highActive = activesArray
-        this.highInactive = inactivesArray
+        this.actives = activesArray
+        this.inactives = inactivesArray
       },
       error: error => {
         console.log(error)

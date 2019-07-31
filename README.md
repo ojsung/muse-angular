@@ -9,4 +9,4 @@ This will open Cher on port 3000
 This is the client end for cher-node.
 Cher handles alerts as reported by Zabbix, via slack.
 Hani serves the workflows as a troubleshooting app
-Natalie is a T2/T3 tool that is currently under construction.
+Evan is a T2/T3 tool that is currently under construction.
