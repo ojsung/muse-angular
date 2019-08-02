@@ -6,8 +6,8 @@ import { IOffender } from '../eva/eva-dmca/offender.model';
 
 export class SocketService extends Socket implements OnInit, OnDestroy {
   constructor(protected auth: AuthService) {
-    // super({ url: 'http://13.57.233.73/api' })
-    super({ url: 'http://localhost:4200/api' })
+    super({ url: 'http://13.57.233.73/api' })
+    // super({ url: 'http://localhost:4200/api' })
 
     const token = this.auth.token
     this.ioSocket.query = {

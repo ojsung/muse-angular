@@ -5,12 +5,12 @@ import { Subscription } from 'rxjs'
 import { DisasterHttpService } from './disaster-services/disaster-http.service'
 import { DisasterEventEmitterService } from './disaster-services/disaster-event-emitter.service'
 import { DisasterFilterService } from './disaster-services/disaster-filter.service'
-import { AlertsSocketService } from '../alerts-socket.service'
+import { CherSocketService } from '../cher-socket.service'
 
 @Component({
   selector: 'muse-disaster',
   templateUrl: './disaster.component.html',
-  styleUrls: ['./disaster.component.css', '../alerts.tables.css', '../alerts.css']
+  styleUrls: ['./disaster.component.css', '../cher.tables.css', '../cher.css']
 })
 export class DisasterComponent implements OnInit, OnDestroy {
   // variables for later
@@ -49,7 +49,7 @@ export class DisasterComponent implements OnInit, OnDestroy {
     private dhs: DisasterHttpService,
     private dees: DisasterEventEmitterService,
     private dfs: DisasterFilterService,
-    private ass: AlertsSocketService
+    private css: CherSocketService
   ) {
     // begin subscribing to disasterService's filtering now that this page is now loaded
     // this will start getting the listfilter and any outages that match the filter
@@ -64,10 +64,10 @@ export class DisasterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // start by notifying the server that we want the events
-    this.ass.requestEntry('events')
+    this.css.requestEntry('events')
 
     // once events have arrived, subscribe to them
-    this.eventsSocket = this.ass.receiveEntry('events').subscribe({
+    this.eventsSocket = this.css.receiveEntry('events').subscribe({
       next: disasters => {
         this.retrievedDisasters = disasters
         this.filteredDisasters = disasters

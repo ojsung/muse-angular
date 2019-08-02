@@ -17,7 +17,7 @@ const routes: Routes = [
     path: 'alerts',
     canActivate: [RouteActivator],
     data: {minRole: 5},
-    loadChildren: () => import('./alerts/alerts.module').then(m => m.AlertsModule)
+    loadChildren: () => import('./cher/cher.module').then(m => m.CherModule)
   },
   {
     path: 'eva',

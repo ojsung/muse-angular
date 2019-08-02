@@ -97,6 +97,9 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.checkForWorkflows()
+    this.hs.startTime = Date.now()
+
     // form to hold the static info and notes
     this.siForm = this.fb.group({
       department: '',
@@ -114,14 +117,12 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.cpeMACControl = this.siForm.get('cpeMAC')
     this.cpeIPControl = this.siForm.get('cpeIP')
     this.autoboxControl = this.siForm.get('autobox')
-
   }
 
   ngOnDestroy() {
     // because the subscription is only created if this.departments is empty,
     // it is possible to create and destroy Hani without creating a subscription
     // in cases where no sub was made, there will be nothing to destroy.
-    this.hs.endTime = Date.now()
     if (this.workflowTrendArray) {
       this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe({
         error: error => {
@@ -138,9 +139,17 @@ export class HaniComponent implements OnInit, OnDestroy {
     }
   }
 
+  // check for workflows. If they aren't already downloaded, download them
+  private checkForWorkflows() {
+    let departmentList = this.hs.departments
+    if (!departmentList) {
+      departmentList = this.hs.getWorkflowList()
+      this.hs.getCommandList()
+    }
+  }
+
   // this will only be called once when the user is selecting which department's workflows to see
   public setDepartment(index) {
-    this.hs.startTime = Date.now()
     this.currentDepartment = this.departments[index]
   }
 
@@ -186,7 +195,7 @@ export class HaniComponent implements OnInit, OnDestroy {
       this.chosenWorkflowContainer,
       this.currentWorkflow.step,
       this.workflowTrendArray,
-      this.azotelIdControl.value,
+      this.azotelIdControl.value
     )
 
     if (this.infoData.what instanceof Array) {
@@ -262,12 +271,13 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   public fullRestart() {
-    this.hs.endTime = Date.now()
     this.sendToServer()
     this.clearDepartmentAndWorkflow()
     this.siForm.reset()
     this.visibleWorkflowCount = 1
     this.workflowText = 'Begin Discovery'
+    this.azotelIdEntered = false
+    this.hs.startTime = Date.now()
   }
 
   private sendToServer() {
@@ -348,5 +358,4 @@ export class HaniComponent implements OnInit, OnDestroy {
   public openReporting() {
     this.showTextBox = true
   }
-
 }

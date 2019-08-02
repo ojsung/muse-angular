@@ -172,6 +172,7 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
   }
 
   public postTracking(workflowTrendArray) {
+    this.endTime = Date.now()
     return this.postEntry(this.trendingUrl, {
       trending: workflowTrendArray,
       user: { firstName: this.auth.firstName, lastName: this.auth.lastName },

@@ -8,7 +8,7 @@ import { HighHttpService } from '../high-http.service'
 @Component({
   selector: 'muse-high-form',
   templateUrl: './high-form.component.html',
-  styleUrls: ['./high-form.component.css', '../../alerts.tables.css']
+  styleUrls: ['./high-form.component.css', '../../cher.tables.css']
 })
 export class HighFormComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder, private hs: HighService, private hhs: HighHttpService) {}

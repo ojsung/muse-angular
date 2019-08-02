@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { AlertsHttpService } from 'src/app/alerts/alerts-http.service'
+import { CherHttpService } from 'src/app/cher/cher-http.service'
 import { HttpClient } from '@angular/common/http'
 import { AuthService } from 'src/app/user/auth.service'
 import { Observable } from 'rxjs'
@@ -12,7 +12,7 @@ import { tap, catchError } from 'rxjs/operators'
 
   // extends the base alerts http service to specifically serve the disaster component
   // because it extends the service, it is accessible even though disaster component is lazily loaded
-export class DisasterHttpService extends AlertsHttpService {
+export class DisasterHttpService extends CherHttpService {
   private disasterUrl = 'api/events'
   constructor(protected http: HttpClient, public auth: AuthService) {
     super(http, auth)

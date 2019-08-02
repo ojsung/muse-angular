@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { IHigh } from './high.model'
 import { Subscription } from 'rxjs'
 import { HighHttpService } from './high-http.service'
-import { AlertsSocketService } from '../alerts-socket.service'
+import { CherSocketService } from '../cher-socket.service'
 
 @Component({
   selector: 'muse-high',
   templateUrl: './high.component.html',
-  styleUrls: ['./high.component.css', '../alerts.tables.css']
+  styleUrls: ['./high.component.css', '../cher.tables.css']
 })
 export class HighComponent implements OnInit, OnDestroy {
   public pageTitle = 'High Alerts'
@@ -36,14 +36,14 @@ export class HighComponent implements OnInit, OnDestroy {
 
   // there is some unfortunate naming here, but I would rather not break convention, since readability
   // is more important here, and no client will ever know the name of the variable
-  constructor(private hhs: HighHttpService, private ass: AlertsSocketService) {}
+  constructor(private hhs: HighHttpService, private css: CherSocketService) {}
 
   ngOnInit() {
     this.authLevel = this.hhs.auth.userType
 
-    this.ass.requestEntry('high')
+    this.css.requestEntry('high')
 
-    this.subscription = this.ass.receiveEntry('high').subscribe({
+    this.subscription = this.css.receiveEntry('high').subscribe({
       next: problems => {
         this.outArray = problems as IHigh[]
         const activesArray: Array<IHigh> = []

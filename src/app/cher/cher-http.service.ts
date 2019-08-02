@@ -6,7 +6,7 @@ import { IDisaster } from './disaster/disaster.model'
 import { HttpService } from '../shared/http.service';
 
 // The contents of this service are quite straightforward
-export class AlertsHttpService extends HttpService{
+export class CherHttpService extends HttpService{
   private enabledArray = ['isDown', 'active']
   constructor(protected http: HttpClient, public auth: AuthService) {
     super(http, auth)

@@ -5,7 +5,7 @@ import { AuthService } from '../user/auth.service'
 @Injectable({
   providedIn: 'root'
 })
-export class AlertsSocketService extends SocketService implements OnInit, OnDestroy {
+export class CherSocketService extends SocketService implements OnInit, OnDestroy {
   constructor(protected auth: AuthService) {
     super(auth)
     this.ioSocket.io.uri += '/alerts'
