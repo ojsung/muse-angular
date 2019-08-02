@@ -1,15 +1,74 @@
-<table>
-  <tbody>
-    <tr>
-      <th>Azotel ID</th>
-      <th>Azotel Name</th>
-      <th>Infraction Count</th>
-      <th>CPE MAC</th>
-      <th>Router MAC</th>
-      <th>Email Sent</th>
-      <th>Infraction Date</th>
-      <th>Infraction History</th>
-    </tr>
-    <tr class="greenFocus" *ngFor="let offender of offenders; let i=index" (focus)='focus(i)'></tr>
-  </tbody>
-</table>
+<div class="flexr">
+  <div [ngClass]="{ 'w3-sidebarmod': this.formView, 'flexr': true }">
+    <form
+      novalidate
+      (ngSubmit)="save()"
+      [formGroup]="dmcaForm"
+      class="flexc flex1"
+      *ngIf="formView"
+    >
+      <div class="form-group mb-2 flexc flex1">
+        <label class="col-form-label flex1" for="azotelId">Azotel ID</label>
+        <input class="form-control flex1" id="azotelId" formControlName="azotelId" />
+      </div>
+      <div class="form-group mb-2 flexc flex1">
+          <label class="col-form-label flex1" for="azotelName">Azotel Name</label>
+          <input class="form-control flex1" id="azotelName" formControlName="azotelName" />
+        </div>
+      <div class="form-group mb-2 flexc flex1">
+        <label class="col-form-label flex1" for="CPEMAC">CPE MAC</label>
+        <input class="form-control flex1" id="CPEMAC" formControlName="CPEMAC" />
+      </div>
+      <div class="form-group mb-2 flexc flex1">
+        <label class="col-form-label flex1" for="routerMAC">Router MAC</label>
+        <input class="form-control flex1" id="routerMAC" formControlName="routerMAC" />
+      </div>
+      <div class="form-group mb-2 flexc flex1">
+        <label class="col-form-label flex1" for="email">Email</label>
+        <input class="form-control flex1" id="email" formControlName="email" />
+      </div>
+      <div class="form-group mb-2 flexc flex1">
+        <label class="col-form-label flex1" for="infractionDate">Infraction Date</label>
+        <input class="form-control flex1" id="infractionDate" formControlName="infractionDate" />
+      </div>
+      <div class="form-group mb-2 flexc flex1">
+        <label class="col-form-label flex1" for="infractionInfo">Infraction Info</label>
+        <input class="form-control flex1" id="infractionInfo" formControlName="infractionInfo" />
+      </div>
+      <button class="btn btn-light" [title]="dmcaForm.valid ? 'Save data' : 'Please complete the form'" [disabled]="!dmcaForm.valid" type="submit">Submit</button>
+    </form>
+  </div>
+  <div (click)="toggleForm()"  style="position: absolute; top: 50%">
+      <i class="icon-angle-left" *ngIf="formView"></i>
+      <i class="icon-angle-right" *ngIf="!formView"></i>
+    </div>
+
+  <table>
+    <tbody>
+      <tr>
+        <th>Azotel ID</th>
+        <th>Azotel Name</th>
+        <th>Infraction Count</th>
+        <th>CPE MAC</th>
+        <th>Router MAC</th>
+        <th>Email</th>
+        <th>Email Sent</th>
+        <th>Infraction History</th>
+      </tr>
+      <tr
+        class="greenFocus"
+        *ngFor="let offender of offendersArray; let entry of [offenders[offender]]; let i = index"
+        (focus)="focus(i)"
+      >
+        {{
+          entry | json
+        }}
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br/>
+<div>
+  {{dmcaForm.value | json}}
+</div>

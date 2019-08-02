@@ -1,10 +1,11 @@
 export interface IOffender {
   _id?: string,
-  azotelId: number,
+  azotelId: string,
   infractionCount: number,
   CPEMAC: string,
-  RouterMAC: string,
-  email: boolean,
+  routerMAC: string,
+  email: string,
   infractionDate: string,
-  infractionHistory: string
+  infractionInfo: string,
+  emailed: boolean
 }

@@ -37,7 +37,7 @@ export class EvaSocketService extends SocketService implements OnInit, OnDestroy
     const keys = Object.keys(change)
     let emptyFieldCount = 0
     keys.forEach(key => {
-      if (!change[key]) {
+      if (key !== 'emailed' && !change[key]) {
         ++emptyFieldCount
       }
     })
