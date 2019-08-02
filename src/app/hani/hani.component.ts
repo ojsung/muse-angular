@@ -13,7 +13,7 @@ import { WorkflowDispositionType } from './models/workflows/workflow-disposition
 import { Subscription } from 'rxjs'
 
 @Component({
-  selector: 'cher-hani',
+  selector: 'muse-hani',
   templateUrl: './hani.component.html',
   styleUrls: ['./hani.component.css']
 })

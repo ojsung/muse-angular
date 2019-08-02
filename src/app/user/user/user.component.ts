@@ -3,7 +3,7 @@ import { UserService } from '../user.service'
 import { IUser } from '../user.model'
 
 @Component({
-  selector: 'cher-user',
+  selector: 'muse-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })

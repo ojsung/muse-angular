@@ -3,17 +3,17 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Cher": {
+    "Muse": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "cher",
+      "prefix": "muse",
       "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/Cher",
+            "outputPath": "dist/Muse",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -60,18 +60,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Cher:build"
+            "browserTarget": "Muse:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "Cher:build:production"
+              "browserTarget": "Muse:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Cher:build"
+            "browserTarget": "Muse:build"
           }
         },
         "test": {
@@ -105,7 +105,7 @@
         }
       }
     },
-    "Cher-e2e": {
+    "Muse-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -114,11 +114,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "Cher:serve"
+            "devServerTarget": "Muse:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "Cher:serve:production"
+              "devServerTarget": "Muse:serve:production"
             }
           }
         },
@@ -134,5 +134,5 @@
       }
     }
   },
-  "defaultProject": "Cher"
+  "defaultProject": "Muse"
 }

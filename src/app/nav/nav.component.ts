@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core'
 import { AuthService } from '../user/auth.service'
 
 @Component({
-  selector: 'cher-nav',
+  selector: 'muse-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  pageTitle = 'Cher'
+  pageTitle = 'Muse'
   constructor(public auth: AuthService) { }
 
   logOut() {

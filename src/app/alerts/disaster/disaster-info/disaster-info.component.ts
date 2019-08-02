@@ -4,7 +4,7 @@ import { IDisaster } from '../disaster.model'
 import { DisasterHttpService } from '../disaster-services/disaster-http.service'
 
 @Component({
-  selector: 'cher-disaster-info',
+  selector: 'muse-disaster-info',
   templateUrl: './disaster-info.component.html',
   styleUrls: ['./disaster-info.component.css']
 })

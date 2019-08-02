@@ -8,7 +8,7 @@ import { DisasterFilterService } from './disaster-services/disaster-filter.servi
 import { AlertsSocketService } from '../alerts-socket.service'
 
 @Component({
-  selector: 'cher-disaster',
+  selector: 'muse-disaster',
   templateUrl: './disaster.component.html',
   styleUrls: ['./disaster.component.css', '../alerts.tables.css', '../alerts.css']
 })
@@ -73,7 +73,7 @@ export class DisasterComponent implements OnInit, OnDestroy {
         this.filteredDisasters = disasters
         this.objArray = this.arrayToObjArray(this.filteredDisasters)
 
-        // Tell Cher to start the process to check and update the list filter
+        // Tell Muse to start the process to check and update the list filter
         this.dees.emitBoolean(true)
       },
       error: error => {

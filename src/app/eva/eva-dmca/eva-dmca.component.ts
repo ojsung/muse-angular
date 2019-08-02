@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs'
 import { IOffender } from './offender.model'
 
 @Component({
-  selector: 'cher-eva-dmca',
+  selector: 'muse-eva-dmca',
   templateUrl: './eva-dmca.component.html',
   styleUrls: ['./eva-dmca.component.css']
 })

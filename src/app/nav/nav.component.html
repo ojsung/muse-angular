@@ -4,7 +4,7 @@
     <ng-container *ngIf="auth.isAuthenticated()"><a class="nav-link" [routerLink]="['/alerts/disaster']">Disaster</a>
     <a class="nav-link" [routerLink]="['/alerts/high']">High</a>
     <a class="nav-link" [routerLink]="['/hani/reporting']" *ngIf="this.auth.userType < 3">Reporting</a>
-    <cher-hani-modal></cher-hani-modal>
+    <muse-hani-modal></muse-hani-modal>
     <!-- <a class="nav-link" [routerLink]="['/hani']">Hani</a> -->
   </ng-container>
   <a class="nav-link" [routerLink]="['/eva/dmca']" *ngIf="this.auth.userType < 4">Eva</a>

@@ -5,7 +5,7 @@ import { HighHttpService } from './high-http.service'
 import { AlertsSocketService } from '../alerts-socket.service'
 
 @Component({
-  selector: 'cher-high',
+  selector: 'muse-high',
   templateUrl: './high.component.html',
   styleUrls: ['./high.component.css', '../alerts.tables.css']
 })

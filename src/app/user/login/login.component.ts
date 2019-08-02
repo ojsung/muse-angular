@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { AuthService } from '../auth.service'
 
 @Component({
-  selector: 'cher-login',
+  selector: 'muse-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

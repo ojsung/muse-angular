@@ -3,7 +3,7 @@ import { HaniService } from '../hani.service'
 import { Subscription } from 'rxjs'
 
 @Component({
-  selector: 'cher-hani-reporting',
+  selector: 'muse-hani-reporting',
   templateUrl: './hani-reporting.component.html',
   styleUrls: ['./hani-reporting.component.css'],
   providers: [HaniService]
@@ -27,7 +27,7 @@ export class HaniReportingComponent implements OnInit, OnDestroy {
     }
   }
 
-  // I don't feel comfortable creating downloadables on Cher since Cher is not hosted internally
+  // I don't feel comfortable creating downloadables on Muse since Muse is not hosted internally
   // I would need to import some dependencies, and they would introduce vulnerabilities
   // because of this, the reporting data will be delivered as a CSV on-screen instead
   public deliverAsCsv() {

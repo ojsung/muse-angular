@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'cher-eva',
+  selector: 'muse-eva',
   templateUrl: './eva.component.html',
   styleUrls: ['./eva.component.css']
 })

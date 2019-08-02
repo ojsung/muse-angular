@@ -45,7 +45,9 @@ export class AuthService {
   }
 
   // return the user type as a number.  Used to verify permissions on the client side.
-  // this is nice.  However, all permissions and authorizations are rechecked server side
+  // This is nice to prevent anyone unauthorized from making requests to the server, reducing the number of
+  // garbage requests that the server will have to deal with.
+  // However, it is possible to get around this, so all permissions and authorizations are rechecked server side
   // to prevent anyone unauthorized from accessing anything they shouldn't
   get userType(): number {
     const userNumber = JSON.parse(localStorage.getItem(this.TYPE_KEY))
@@ -80,7 +82,7 @@ export class AuthService {
     )
   }
 
-  // Need to implement a way to change passwords. But that will wait until Cher is moved to internal server space
+  // Need to implement a way to change passwords. But that will wait until Muse is moved to internal server space
   // public updatePassword(password: string) {
 
   // }

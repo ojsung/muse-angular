@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { HaniComponent } from '../hani.component'
 
 @Component({
-  selector: 'cher-hani-modal',
+  selector: 'muse-hani-modal',
   templateUrl: './hani-modal.component.html',
   styleUrls: ['./hani-modal.component.css']
 })

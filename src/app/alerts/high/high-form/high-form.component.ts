@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs'
 import { HighHttpService } from '../high-http.service'
 
 @Component({
-  selector: 'cher-high-form',
+  selector: 'muse-high-form',
   templateUrl: './high-form.component.html',
   styleUrls: ['./high-form.component.css', '../../alerts.tables.css']
 })

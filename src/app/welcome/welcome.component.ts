@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'cher-welcome',
+  selector: 'muse-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css']
 })
 
   // there may or may not be easter eggs on this page.  I plead the fifth
 export class WelcomeComponent implements OnInit {
-  pageTitle = 'Cher'
+  pageTitle = 'Muse'
 
   private rSysArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 

@@ -6,7 +6,7 @@ import { restrictedWords } from '../../shared/restricted-words.validator'
 import { IUser } from '../user.model'
 
 @Component({
-  selector: 'cher-profile',
+  selector: 'muse-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
