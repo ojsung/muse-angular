@@ -57,16 +57,19 @@ export class HaniReportingComponent implements OnInit, OnDestroy {
     this.trendingResults.forEach(entry => {
       if (entry.trending[0]) {
         this.csv +=
-          this.encapsulateAsString(
-            entry.user.firstName + ' ' + entry.user.lastName + entry.timeID
-          ) + this.encapsulateAsString('Step')
+          this.encapsulateAsString(entry.user.firstName + ' ' + entry.user.lastName) +
+          this.encapsulateAsString(entry.trending[0].azotelId) +
+          this.encapsulateAsString(entry.timeId) +
+          this.encapsulateAsString(entry.endTimeId)
         entry.trending.forEach(datum => {
           this.csv += this.encapsulateAsString(datum.step)
         })
         this.csv += '\n'
         this.csv +=
           this.encapsulateAsString(entry.trending[0].workflow) +
-          this.encapsulateAsString('Timestamp')
+          this.encapsulateAsString('Azotel ID') +
+          this.encapsulateAsString('Start Time') +
+          this.encapsulateAsString('End Time')
         entry.trending.forEach(datum => {
           this.csv += this.encapsulateAsString(datum.date)
         })

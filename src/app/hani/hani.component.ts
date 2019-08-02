@@ -3,7 +3,7 @@ import { IWorkflowContainer } from './models/workflows/workflow-container.model'
 import { IWorkflowOption } from './models/workflows/workflow-option.model'
 import { IWorkflowDepartment } from './models/workflows/workflow-department.model'
 import { StepType } from './models/workflows/workflow-step.model'
-import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms'
+import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms'
 import { IWorkflowinfoData } from './models/workflows/workflow-option-info.model'
 import { IQrfTemplate } from './models/workflows/workflow-qrf-template.model'
 import { HaniService } from './hani.service'
@@ -30,10 +30,11 @@ export class HaniComponent implements OnInit, OnDestroy {
   public workflowContainersInDepartment: IWorkflowContainer[]
   private chosenWorkflowContainer: IWorkflowContainer
   public currentWorkflow: IWorkflowOption
-  public azotelId: string
+  public azotelId: number
   public infoData: IWorkflowinfoData
   public currentNav: Array<[[StepType], string, string]> = []
   public pageTitle = 'Hani: The Troubleshooting Assistant'
+  public workflowText = 'Begin Discovery'
   private azotelIdControl: AbstractControl
   private apNameControl: AbstractControl
   private apIPControl: AbstractControl
@@ -43,6 +44,8 @@ export class HaniComponent implements OnInit, OnDestroy {
   private workflowTrendArray: Array<IWorkflowTrend> = []
   private trackingSubscription: Subscription
   private initialWorkflow: string
+  public azotelIdEntered = false
+  public visibleWorkflowCount = 1
   public showTextBox = false
   public textReport = ''
   private get reportToSend() {
@@ -74,6 +77,7 @@ export class HaniComponent implements OnInit, OnDestroy {
   // When a T1 needs to send in a QRF, this autofills the QRF with the customer's info
   get jsonInfoDataWhat() {
     let filledOutJson: IQrfTemplate
+    let jsonText = ''
     if (this.infoData.what instanceof Object && !(this.infoData.what instanceof Array)) {
       filledOutJson = this.infoData.what
       filledOutJson['Initial Workflow'] = this.initialWorkflow
@@ -82,7 +86,11 @@ export class HaniComponent implements OnInit, OnDestroy {
       filledOutJson['AP IP'] = this.apIPControl.value
       filledOutJson['CPE MAC'] = this.cpeMACControl.value
       filledOutJson['CPE IP'] = this.cpeIPControl.value
-      return Object.entries(filledOutJson)
+      // turn json into text
+      Object.entries(filledOutJson).forEach(entry => {
+        jsonText += `${entry[0]} : ${entry[1]}\n`
+      })
+      return jsonText
     } else {
       return null
     }
@@ -92,7 +100,7 @@ export class HaniComponent implements OnInit, OnDestroy {
     // form to hold the static info and notes
     this.siForm = this.fb.group({
       department: '',
-      azotelId: '',
+      azotelId: [null, [Validators.required, Validators.min(1)]],
       apName: '',
       apIP: '',
       cpeMAC: '',
@@ -107,14 +115,13 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.cpeIPControl = this.siForm.get('cpeIP')
     this.autoboxControl = this.siForm.get('autobox')
 
-    this.hs.timeID = Date.now()
   }
 
   ngOnDestroy() {
     // because the subscription is only created if this.departments is empty,
     // it is possible to create and destroy Hani without creating a subscription
     // in cases where no sub was made, there will be nothing to destroy.
-
+    this.hs.endTime = Date.now()
     if (this.workflowTrendArray) {
       this.trackingSubscription = this.hs.postTracking(this.workflowTrendArray).subscribe({
         error: error => {
@@ -123,6 +130,9 @@ export class HaniComponent implements OnInit, OnDestroy {
         },
         next: () => {
           this.trackingSubscription.unsubscribe()
+        },
+        complete: () => {
+          this.trackingSubscription.unsubscribe()
         }
       })
     }
@@ -130,6 +140,7 @@ export class HaniComponent implements OnInit, OnDestroy {
 
   // this will only be called once when the user is selecting which department's workflows to see
   public setDepartment(index) {
+    this.hs.startTime = Date.now()
     this.currentDepartment = this.departments[index]
   }
 
@@ -139,6 +150,8 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.chosenWorkflowContainer = this.workflowContainersInDepartment[index]
     const workflowBegin = this.chosenWorkflowContainer.begin
     this.initialWorkflow = this.chosenWorkflowContainer.workflowName
+    this.visibleWorkflowCount = this.currentDepartment.workflows.length
+    this.workflowText = 'Choose a Workflow:'
     this.selectNextStep(workflowBegin)
   }
 
@@ -172,7 +185,8 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.hs.gatherWorkflowTrend(
       this.chosenWorkflowContainer,
       this.currentWorkflow.step,
-      this.workflowTrendArray
+      this.workflowTrendArray,
+      this.azotelIdControl.value,
     )
 
     if (this.infoData.what instanceof Array) {
@@ -248,10 +262,12 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   public fullRestart() {
+    this.hs.endTime = Date.now()
     this.sendToServer()
     this.clearDepartmentAndWorkflow()
     this.siForm.reset()
-    this.hs.timeID = Date.now()
+    this.visibleWorkflowCount = 1
+    this.workflowText = 'Begin Discovery'
   }
 
   private sendToServer() {
@@ -315,7 +331,7 @@ export class HaniComponent implements OnInit, OnDestroy {
   public reportProblem(reportType) {
     const currentWfStep = this.currentWorkflow.step
     const report = this.reportToSend
-    const fullReport = `${reportType}\n${this.currentNav}, ${currentWfStep}\n${report}`
+    const fullReport = `${reportType}: ${this.currentNav}, ${currentWfStep} - ${report}`
     this.bugReportSubscription = this.hs.postBugs(fullReport).subscribe(() => {
       this.bugReportSubscription.unsubscribe()
       this.showTextBox = false
@@ -323,7 +339,14 @@ export class HaniComponent implements OnInit, OnDestroy {
     })
   }
 
+  public submitAzotelId() {
+    if (this.azotelIdControl.valid) {
+      this.azotelIdEntered = true
+    }
+  }
+
   public openReporting() {
     this.showTextBox = true
   }
+
 }

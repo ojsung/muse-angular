@@ -10,15 +10,6 @@
   margin: 10px 20px;
 }
 
-.w3-sidebarmod {
-  height: 100%;
-  background-color:rgba(240, 240, 240, 0.966);
-  overflow: auto;
-  padding: 5px;
-  width: 12%;
-  margin: 10px 20px;
-  border: 1px solid #ECF0F1;
-}
 
 input textarea {
   width:80%;
@@ -79,5 +70,5 @@ input {
 
 .w3-bar {
   width: 100%;
-  overflow: hidden;
+  overflow: auto
 }

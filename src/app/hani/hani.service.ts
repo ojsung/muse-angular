@@ -27,7 +27,8 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
   private trendingSubscription: Subscription
   private commandSubscription: Subscription
   private workflowSubscription: Subscription
-  public timeID: number
+  public startTime: number
+  public endTime: number
   private workflowComplete: IWorkflowOption = {
     step: ['Q', 0, null],
     label: 'Complete',
@@ -76,12 +77,13 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
   public gatherWorkflowTrend(
     workflow: IWorkflowContainer,
     step: StepType,
-    workflowTrendArray: Array<IWorkflowTrend>
+    workflowTrendArray: Array<IWorkflowTrend>,
+    azotelId,
   ) {
     if (step && workflow && workflowTrendArray) {
       const date = Date.now()
       const workflowName = workflow.workflowName
-      workflowTrendArray.push({ workflow: workflowName, step, date })
+      workflowTrendArray.push({ workflow: workflowName, step, date, azotelId })
     }
   }
 
@@ -173,7 +175,8 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
     return this.postEntry(this.trendingUrl, {
       trending: workflowTrendArray,
       user: { firstName: this.auth.firstName, lastName: this.auth.lastName },
-      timeID: this.timeID
+      timeId: this.startTime,
+      endTimeId: this.endTime
     })
   }
 

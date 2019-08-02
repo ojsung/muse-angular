@@ -13,13 +13,20 @@
 <div class="modal-body rowflex" style="height: 100%; width: 100%">
   <div class="w3-sidebarmod" style="order:0;">
     <h6>Navigation History</h6>
-    <button class="btn btn-light" style="width:100%" (click)="fullRestart()" *ngIf="currentDepartment">Restart</button>
+    <button
+      class="btn btn-light"
+      style="width:100%"
+      (click)="fullRestart()"
+      *ngIf="currentDepartment"
+    >
+      Restart
+    </button>
     <ng-container *ngIf="currentNav">
       <span *ngFor="let nav of currentNav">
-        <span (click)="trackAndSelectWorkflow(null, nav[0][0])" class="fakelink">Return to {{ nav[0] }}</span
+        <span (click)="trackAndSelectWorkflow(null, nav[0][0])" class="fakelink"
+          >Return to {{ nav[0] }}</span
         ><br />
-        {{ nav[1] }} <i class="icon-right" aria-hidden="true"></i> {{ nav[2] }}
-        <br /><br />
+        {{ nav[1] }} <i class="icon-right" aria-hidden="true"></i> {{ nav[2] }} <br /><br />
       </span>
     </ng-container>
     <div *ngIf="!currentNav">No history to display</div>
@@ -111,7 +118,13 @@
     </div>
     <form [formGroup]="siForm" style="flex:1">
       <div class="w3-bar enborder" style="position:relative; padding: 5px;height:75%">
-        <ng-container *ngIf="!currentDepartment">
+        <ng-container *ngIf="!azotelIdEntered">
+          <div class="card-header bg-secondary option-banner">
+            <strong>Enter the Azotel ID to Proceed</strong>
+          </div>
+          <button (click)="submitAzotelId()" class="btn btn-light btn-select">Proceed</button>
+        </ng-container>
+        <ng-container *ngIf="!currentDepartment && azotelIdEntered">
           <div class="card-header bg-secondary option-banner">
             <strong> Choose Your Department:</strong>
           </div>
@@ -126,10 +139,13 @@
         </ng-container>
         <ng-container *ngIf="currentDepartment && !currentWorkflow">
           <div class="card-header bg-secondary option-banner">
-            <strong> Choose a Workflow:</strong>
+            <strong>{{ workflowText }}</strong>
           </div>
           <button
-            *ngFor="let workflow of currentDepartment.workflows; let i = index"
+            *ngFor="
+              let workflow of currentDepartment.workflows | slice: 0:visibleWorkflowCount;
+              let i = index
+            "
             class="btn btn-light btn-select"
             (click)="selectWorkflow(i)"
           >
@@ -142,9 +158,8 @@
           </div>
           <div style="white-space: pre-line" *ngIf="!infoDataDataType">{{ infoData.what }}</div>
           <ng-container *ngIf="infoDataDataType">
-            <span *ngFor="let entry of jsonInfoDataWhat"
-              >{{ entry[0] }} : {{ entry[1] }} <br
-            /></span>
+              <span style="white-space: pre-wrap">{{ jsonInfoDataWhat }}
+            </span>
           </ng-container>
           <ng-container *ngIf="currentWorkflow.options && currentWorkflow.options[0][1]">
             <button
@@ -163,9 +178,9 @@
             >
               Move to {{ currentWorkflow.options[0][0] }} Workflow
             </button>
-            <!-- <button (click)="clearCurrentWorkflow()" class="btn btn-info dangerbuttons">
+            <button (click)="clearCurrentWorkflow()" class="btn btn-info dangerbuttons">
               Restart
-            </button> -->
+            </button>
             <button (click)="fullRestart()" class="btn btn-danger dangerbuttons">
               Restart and Clear Notes
             </button>
