@@ -14,8 +14,8 @@ export class AuthService {
   private currentUser: IUser
   constructor(private http: HttpClient) {}
 
-  // private loginUrl = 'http://localhost:4200/api/user/login'
-  private loginUrl = 'api/user/login'
+  private loginUrl = 'http://localhost:4200/api/user/login'
+  // private loginUrl = 'api/user/login'
   private TOKEN_KEY = 'token'
   private FIRST_KEY = 'firstName'
   private LAST_KEY = 'lastName'

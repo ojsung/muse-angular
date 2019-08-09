@@ -103,4 +103,8 @@ export class HighComponent implements OnInit, OnDestroy {
     const removeIndex = arrayToClear.indexOf(alert)
     arrayToClear.splice(removeIndex, 1)
   }
+
+  public trackHigh(index: number, alert: IHigh) {
+    return alert.site
+  }
 }

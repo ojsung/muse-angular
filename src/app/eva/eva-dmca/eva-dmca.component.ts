@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, AbstractType } from '@angular/core'
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms'
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms'
 import { EvaSocketService } from '../eva-socket.service'
 import { Subscription } from 'rxjs'
 import { IOffender } from './offender.model'
@@ -27,19 +27,26 @@ export class EvaDmcaComponent implements OnInit, OnDestroy {
   private CPEMACControl: AbstractControl
   private routerMACControl: AbstractControl
   private emailControl: AbstractControl
-  private infractionDateControl: AbstractControl
-  private infractionInfoControl: AbstractControl
+  private emailedControl: AbstractControl
+  private infractionHistoryControl: AbstractControl
+
+  public get infractionList(): FormArray {
+    return this.dmcaForm.get('infractionHistory') as FormArray
+  }
 
   ngOnInit() {
     this.ess.requestEntry('eva-DMCA')
-    this.ess.receiveOnce('dmca-full')
+    this.ess.receiveOnce('dmca-full').then(value => {
+      Object.assign(this.offenders, value)
+      this.offendersArray = Object.keys(this.offenders)
+    })
 
     this.updateReceiver = this.ess.receiveEntry('dmca-update').subscribe({
       next: update => {
         const entry = update as IOffender
         const azotelId = entry.azotelId
         this.offenders[azotelId] = entry
-        this.offendersArray.push(azotelId)
+        console.log('offenders ' + JSON.stringify(this.offenders))
       },
       error: err => {
         console.log(err)
@@ -55,8 +62,8 @@ export class EvaDmcaComponent implements OnInit, OnDestroy {
       CPEMAC: [null, [Validators.required]],
       routerMAC: [null, [Validators.required]],
       email: [null, [Validators.required, Validators.email]],
-      infractionDate: [null, [Validators.required]],
-      infractionInfo: [null, [Validators.required]]
+      emailed: [false],
+      infractionHistory: this.fb.array([this.buildHistory()])
     })
     this.azotelIdControl = this.dmcaForm.get('azotelId')
     this.azotelNameControl = this.dmcaForm.get('azotelName')
@@ -64,8 +71,8 @@ export class EvaDmcaComponent implements OnInit, OnDestroy {
     this.CPEMACControl = this.dmcaForm.get('CPEMAC')
     this.routerMACControl = this.dmcaForm.get('routerMac')
     this.emailControl = this.dmcaForm.get('email')
-    this.infractionDateControl = this.dmcaForm.get('infractionDate')
-    this.infractionInfoControl = this.dmcaForm.get('infractionInfo')
+    this.emailedControl = this.dmcaForm.get('emailed')
+    this.infractionHistoryControl = this.dmcaForm.get('infractionHistory')
   }
   ngOnDestroy() {
     if (this.fullReceiver) {
@@ -89,8 +96,37 @@ export class EvaDmcaComponent implements OnInit, OnDestroy {
     this.formView = !this.formView
   }
 
+  public sendUpdate(update) {
+    this.ess.submitChange('dmca-update', update)
+  }
+
+  public buildHistory(date?, info?): FormGroup {
+    const formDate = date ? date : null
+    const formInfo = info ? info : null
+    return this.fb.group({
+      infractionDate: formDate,
+      infractionInfo: formInfo
+    })
+  }
+
+  public addHistoryRow(azotelId) {
+    this.offenders[azotelId].infractionHistory.push({infractionDate: null, infractionInfo: null})
+  }
+
+  public removeHistoryRow(azotelId, index) {
+    this.offenders[azotelId].infractionHistory.splice(index, 1)
+  }
+
   public save() {
-    const formValue = { emailed: false, ...this.dmcaForm.value } as IOffender
+    const formValue = this.dmcaForm.value
+    Object.assign(formValue, {
+      infractionHistory: [
+        {
+          infractionDate: null,
+          infractionInfo: null
+        }
+      ]
+    })
     this.ess.submitChange('dmca-update', formValue)
     console.log('I sent ' + JSON.stringify(formValue))
   }

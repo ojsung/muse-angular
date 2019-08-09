@@ -30,7 +30,7 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let obj of displayedArray; let i = index" colspan="9">
+          <ng-container *ngFor="let obj of displayedArray; let i = index; trackBy: trackAlert" colspan="9">
             <tr>
               <th colspan="9" (click)="expandRow(i)">
                 <i

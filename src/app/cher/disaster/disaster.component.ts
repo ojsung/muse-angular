@@ -12,8 +12,11 @@ import { CherSocketService } from '../cher-socket.service'
   templateUrl: './disaster.component.html',
   styleUrls: ['./disaster.component.css', '../cher.tables.css', '../cher.css']
 })
+
+// This is the first component I ever created in typescript.  Because of that,
+// it is quite bad.  It needs to be rewritten from the bottom up.
+// I will rewrite this whole component when there aren't larger fires I need to deal with.
 export class DisasterComponent implements OnInit, OnDestroy {
-  // variables for later
   public pageTitle = 'Disaster Alerts'
   public showDetail = false
   public expandedIndex: number
@@ -97,6 +100,10 @@ export class DisasterComponent implements OnInit, OnDestroy {
     this.dhs.nullifyThenRemoveEntry(disaster, this.disasterUrl).subscribe({
       error: error => console.log(error)
     })
+  }
+
+  public trackDisaster(index: number, alert: IDisaster) {
+    return alert.site
   }
 
   // collect all keys and push to finalObject and return it

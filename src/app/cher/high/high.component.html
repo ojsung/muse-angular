@@ -20,7 +20,7 @@
           <tr>
             <th colspan="7">Active Alerts</th>
           </tr>
-          <ng-container *ngFor="let obj of actives; let i = index">
+          <ng-container *ngFor="let obj of actives; let i = index; trackBy: trackHigh">
             <tr>
               <td>
                 <button
@@ -62,7 +62,7 @@
             </th>
           </tr>
           <ng-container *ngIf="this.inactiveToggle">
-            <ng-container *ngFor="let obj of inactives; let i = index" colspan="7">
+            <ng-container *ngFor="let obj of inactives; let i = index; trackBy: trackHigh" colspan="7">
               <tr>
                 <td>
                   <button
