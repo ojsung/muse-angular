@@ -82,9 +82,8 @@ export class AuthService {
     )
   }
 
-  // Need to implement a way to change passwords. But that will wait until Muse is moved to internal server space
+  // Need to implement a way to change passwords. But that will wait until Cher is moved to internal server space
   // public updatePassword(password: string) {
-
   // }
 
   public isAuthenticated() {
