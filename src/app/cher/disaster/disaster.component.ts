@@ -101,13 +101,9 @@ export class DisasterComponent implements OnInit, OnDestroy {
     })
   }
 
-<<<<<<< HEAD
   public trackDisaster(index: number, alert: IDisaster) {
     return alert.site
   }
-
-=======
->>>>>>> f2252c4... Changed naming from Alerts to Cher
   // collect all keys and push to finalObject and return it
   private arrayToObjArray(disaster: IDisaster[]): any[] {
     const finalObject = {}
