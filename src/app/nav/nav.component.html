@@ -1,5 +1,4 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark">
-  <div class="row" style="margin-left:5px; text-align: center">
     <a class="navbar-brand" [routerLink]="['/welcome']">{{ pageTitle }}</a>
     <ng-container *ngIf="auth.isAuthenticated()">
       <a class="dropdown nav-link">
@@ -16,6 +15,7 @@
       <!-- <a class="nav-link" [routerLink]="['/hani']">Hani</a> -->
     </ng-container>
     <a class="nav-link" [routerLink]="['/eva/dmca']" *ngIf="this.auth.userType < 4">Eva</a>
+
     <a
       *ngIf="!auth.isAuthenticated()"
       class="nav-link"
