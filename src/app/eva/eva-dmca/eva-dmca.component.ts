@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AbstractType } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms'
 import { EvaSocketService } from '../eva-socket.service'
 import { Subscription } from 'rxjs'
@@ -10,7 +10,7 @@ import { IOffender } from './offender.model'
   styleUrls: ['./eva-dmca.component.css']
 })
 export class EvaDmcaComponent implements OnInit, OnDestroy {
-  constructor(private ess: EvaSocketService, private fb: FormBuilder) {}
+  constructor(private ess: EvaSocketService, private fb: FormBuilder) { }
   public offenders = {}
   public offendersArray = []
   private fullReceiver: Subscription
@@ -110,7 +110,7 @@ export class EvaDmcaComponent implements OnInit, OnDestroy {
   }
 
   public addHistoryRow(azotelId) {
-    this.offenders[azotelId].infractionHistory.push({infractionDate: null, infractionInfo: null})
+    this.offenders[azotelId].infractionHistory.push({ infractionDate: null, infractionInfo: null })
   }
 
   public removeHistoryRow(azotelId, index) {

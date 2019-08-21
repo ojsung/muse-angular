@@ -25,6 +25,12 @@ const routes: Routes = [
     data: {minRole: 4},
     loadChildren: () => import('./eva/eva.module').then(m => m.EvaModule)
   },
+  {
+    path: 'eva',
+    canActivate: [RouteActivator],
+    data: {minRole: 4},
+    loadChildren: () => import('./eva/eva.module').then(m => m.EvaModule)
+  },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ]
 
