@@ -7,10 +7,10 @@ import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/fo
 import { IWorkflowinfoData } from './models/workflows/workflow-option-info.model'
 import { IQrfTemplate } from './models/workflows/workflow-qrf-template.model'
 import { HaniService } from './hani.service'
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { IWorkflowTrend } from './models/workflow-trend.model'
 import { WorkflowDispositionType } from './models/workflows/workflow-disposition.model'
 import { Subscription } from 'rxjs'
+import { AuxiliaryWorkflowsService } from './auxiliary-workflows.service';
 
 @Component({
   selector: 'muse-hani',
@@ -19,11 +19,7 @@ import { Subscription } from 'rxjs'
 })
 export class HaniComponent implements OnInit, OnDestroy {
   @Input() name
-  constructor(
-    private fb: FormBuilder,
-    private hs: HaniService,
-    public activeModal: NgbActiveModal
-  ) {}
+  constructor(private fb: FormBuilder, public hs: HaniService) {}
   public siForm: FormGroup // static info form
   public currentDepartment: IWorkflowDepartment
   private calledFromWf = false
@@ -44,18 +40,19 @@ export class HaniComponent implements OnInit, OnDestroy {
   private workflowTrendArray: Array<IWorkflowTrend> = []
   private trackingSubscription: Subscription
   private initialWorkflow: string
-  public azotelIdEntered = false
   public visibleWorkflowCount = 1
   public showTextBox = false
   public textReport = ''
+  public userName = this.hs.auth.firstName
   private get reportToSend() {
     return this.textReport
   }
   private bugReportSubscription: Subscription
+  public navOpen = false
 
   // Depending on what step the T1 is on, infoData may still be undefined.
   // this let's the html know the state of infoData
-  get infoDataDataType() {
+  public get infoDataDataType() {
     return this.infoData.what instanceof Object
   }
 
@@ -72,7 +69,9 @@ export class HaniComponent implements OnInit, OnDestroy {
     return this.chosenWorkflowContainer ? this.chosenWorkflowContainer.steps.length : 0
   }
 
-  public userName = this.hs.auth.firstName
+  public get azotelIdEntered(): boolean {
+    return !!this.azotelIdControl.value
+  }
 
   // When a T1 needs to send in a QRF, this autofills the QRF with the customer's info
   get jsonInfoDataWhat() {
@@ -94,6 +93,10 @@ export class HaniComponent implements OnInit, OnDestroy {
     } else {
       return null
     }
+  }
+
+  public get introPass(): boolean {
+    return this.hs.aws.index === 2 && !this.azotelIdEntered
   }
 
   ngOnInit() {
@@ -137,6 +140,7 @@ export class HaniComponent implements OnInit, OnDestroy {
         }
       })
     }
+    this.hs.aws.resetIndex()
   }
 
   // check for workflows. If they aren't already downloaded, download them
@@ -169,8 +173,6 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   private selectNextStep(chosenIndexStep: StepType) {
-    // start by updating the notes in the autobox
-    this.updateNotes()
     let matchFound = false
 
     // We need to save the current disposition codes, in case there is no next step
@@ -247,13 +249,11 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   // pushes autotext to autobox
-  private updateNotes() {
-    if (this.infoData && this.infoData.autoText) {
-      this.autoboxControl.setValue(
-        this.autoboxControl.value + this.currentWorkflow.infoData.autoText
-      )
+  private updateNotes(notes: string) {
+    if (notes) {
+      this.autoboxControl.setValue(this.autoboxControl.value + notes)
+      this.autoboxControl.updateValueAndValidity()
     }
-    this.autoboxControl.updateValueAndValidity()
   }
 
   public clearDepartmentAndWorkflow() {
@@ -276,8 +276,8 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.siForm.reset()
     this.visibleWorkflowCount = 1
     this.workflowText = 'Begin Discovery'
-    this.azotelIdEntered = false
     this.hs.startTime = Date.now()
+    this.hs.aws.resetIndex()
   }
 
   private sendToServer() {
@@ -307,13 +307,21 @@ export class HaniComponent implements OnInit, OnDestroy {
     // they will be used later to update the navigation history
     let currentStep: StepType
     let currentLabel: string
+    let currentAutotext: string
     ;({ currentStep, currentLabel } = this.setCurrentInfo(currentStep, currentLabel))
 
     // use checkSource to see if we're entering this workflow from another workflow
     // or from the workflow container or nav bar
     // checkSource will return a falsy value if coming from the workflow container or nav bar
     let chosenIndexStep: StepType
-    chosenIndexStep = chosenIndexOptions ? chosenIndexOptions[1] : workflowBegin
+    if (chosenIndexOptions) {
+      chosenIndexStep = chosenIndexOptions[1]
+      currentAutotext = chosenIndexOptions[2] ? chosenIndexOptions[2] : ''
+      this.updateNotes(currentAutotext)
+    } else {
+      chosenIndexStep = workflowBegin
+      currentAutotext = ''
+    }
 
     // reset the called from wf tracker.
     this.resetCalledFromWf(currentStep, currentLabel, chosenIndexOptions)
@@ -349,13 +357,17 @@ export class HaniComponent implements OnInit, OnDestroy {
     })
   }
 
-  public submitAzotelId() {
-    if (this.azotelIdControl.valid) {
-      this.azotelIdEntered = true
-    }
-  }
-
   public openReporting() {
     this.showTextBox = true
+  }
+
+  /* Set the width of the side navigation to 250px */
+  public openNav() {
+    this.navOpen = true
+  }
+
+  /* Set the width of the side navigation to 0 */
+  public closeNav() {
+    this.navOpen = false
   }
 }

@@ -11,7 +11,6 @@ import { NavComponent } from './nav/nav.component'
 import { AuthInterceptorService } from './user/auth-interceptor.service'
 import { HaniModule } from './hani/hani.module'
 import 'zone.js'
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { EvaModule } from './eva/eva.module'
 import { SocketIoModule,  } from 'ngx-socket-io'
 
@@ -27,7 +26,6 @@ import { SocketIoModule,  } from 'ngx-socket-io'
     SharedModule,
     HttpClientModule,
     HaniModule,
-    NgbModule,
     EvaModule,
     SocketIoModule,
   ],

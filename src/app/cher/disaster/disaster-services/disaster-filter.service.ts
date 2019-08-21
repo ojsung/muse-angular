@@ -8,6 +8,11 @@ export class DisasterFilterService {
   private notMatched = -1
   constructor() {}
 
+  /**
+   * @returns an array of filtered sites
+   * @param filterBy the string by which to filter
+   * @param finalArray The array to which the changes will be added
+   */
   public performFilter(filterBy: string, finalArray): any[] {
     const filteredSites = []
     return this.siteFilter(filteredSites, filterBy, finalArray)

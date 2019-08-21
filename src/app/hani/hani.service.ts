@@ -3,16 +3,16 @@ import { IWorkflowContainer } from './models/workflows/workflow-container.model'
 import { StepType } from './models/workflows/workflow-step.model'
 import { IWorkflowTrend } from './models/workflow-trend.model'
 import { AuthService } from '../user/auth.service'
-import { IWorkflowOption } from './models/workflows/workflow-option.model'
 import { HttpService } from '../shared/http.service'
 import { HttpClient } from '@angular/common/http'
 import { IWorkflowDepartment } from './models/workflows/workflow-department.model'
 import { tap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
+import { AuxiliaryWorkflowsService } from './auxiliary-workflows.service';
 
 @Injectable()
 export class HaniService extends HttpService implements OnInit, OnDestroy {
-  constructor(protected http: HttpClient, public auth: AuthService) {
+  constructor(protected http: HttpClient, public auth: AuthService, public aws: AuxiliaryWorkflowsService) {
     super(http, auth)
   }
 
@@ -29,30 +29,6 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
   private workflowSubscription: Subscription
   public startTime: number
   public endTime: number
-  private workflowComplete: IWorkflowOption = {
-    step: ['Q', 0, null],
-    label: 'Complete',
-    infoData: {
-      learnMore: 'Complete',
-      why:
-        'If you are seeing this, please fill out the bug report and make the note "It failed here". If you customer requires further help, please contact QRF',
-      what: {
-        'Customer ID': null,
-        'Initial Workflow': null,
-        'Current Workflow': null,
-        'Where you are in the Workflow': null,
-        'AP Device Name': null,
-        'AP IP': null,
-        'CPE MAC': null,
-        'CPE IP': null,
-        Question:
-          'Hani has reached a failpoint, and I have filled out a bugreport.  But my customer is still experiencing issues.'
-      },
-      disposition: [[0, null], [1, null], [2, null], [3, null], [4, null]],
-      autoText: null
-    },
-    options: [['Complete', ['0', 0, '0']]]
-  }
 
   public get departments() {
     return this.departmentList
@@ -64,9 +40,9 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
     }
   }
 
-  public get completeWorkflow() {
-    return this.workflowComplete
-  }
+  public completeWorkflow = this.aws.workflowComplete
+  public introWorkflow = this.aws.workflowIntro
+
 
   public compareArrays(array1, array2) {
     return (

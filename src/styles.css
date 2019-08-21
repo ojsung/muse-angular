@@ -10,22 +10,6 @@
   flex-direction: column; /*added*/
 }
 
- .haniWindow {
-  height: 100%;
-  width: 100%;
-}
-
-div.modal-dialog {
-  max-width: 95vw;
-  max-height: 95vw;
-  height: 95vh;
-  width: 95vw;
-}
-
-.modal-content {
-  height: 100%;
-  width: 100%
-}
 
 .enborder {
   border: 1px solid #ECF0F1;
@@ -39,6 +23,10 @@ div.modal-dialog {
   width: 12%;
   margin: 10px 20px;
   border: 1px solid #ECF0F1;
+}
+
+textarea {
+  white-space: pre-wrap
 }
 
 muse-hani {

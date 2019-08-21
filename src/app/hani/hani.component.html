@@ -1,16 +1,15 @@
-<div class="modal-header card-header" style="background-color:rgb(0, 51, 102); color:seashell">
-  <strong> {{ pageTitle }}</strong>
-  <button
-    type="button"
-    class="close"
-    aria-label="Close"
-    style="color:white"
-    (click)="activeModal.dismiss('Cross click')"
-  >
-    <span aria-hidden="true">&times;</span>
-  </button>
+<!-- from https://www.w3schools.com/howto/howto_js_sidenav.asp
+        Thank you W3 schools -->
+<div [ngClass]="{'sidenav':true, fullwidth: navOpen}">
+  <i class="closebtn" (click)="closeNav()">&times;</i>
+<muse-disaster></muse-disaster>
 </div>
-<div class="modal-body rowflex" style="height: 100%; width: 100%">
+
+<!-- Use any element to open the sidenav -->
+<button class="btn btn-info" style="margin:5px 15px" (click)="openNav()">View Cher</button>
+
+
+<div class="haniWindow rowflex">
   <div class="w3-sidebarmod" style="order:0;">
     <h6>Navigation History</h6>
     <button
@@ -118,15 +117,22 @@
     </div>
     <form [formGroup]="siForm" style="flex:1">
       <div class="w3-bar enborder" style="position:relative; padding: 5px;height:75%">
-        <ng-container *ngIf="!azotelIdEntered">
+        <ng-container *ngIf="hs.aws.index < 3">
           <div class="card-header bg-secondary option-banner">
-            <strong>Enter the Azotel ID to Proceed</strong>
+            <strong>{{ hs.aws.workflowIntro[hs.aws.index].label }}</strong>
           </div>
-          <button (click)="submitAzotelId()" class="btn btn-light btn-select">Proceed</button>
+          <div>{{ hs.aws.workflowIntro[hs.aws.index].infoData.what }}</div>
+          <button
+            [disabled]="this.introPass"
+            class="btn btn-light btn-select"
+            (click)="hs.aws.incrementIndex()"
+          >
+            Continue
+          </button>
         </ng-container>
-        <ng-container *ngIf="!currentDepartment && azotelIdEntered">
+        <ng-container *ngIf="!currentDepartment && hs.aws.index == 3">
           <div class="card-header bg-secondary option-banner">
-            <strong> Choose Your Department:</strong>
+            <strong>Choose Your Department:</strong>
           </div>
 
           <button
@@ -158,8 +164,7 @@
           </div>
           <div style="white-space: pre-line" *ngIf="!infoDataDataType">{{ infoData.what }}</div>
           <ng-container *ngIf="infoDataDataType">
-              <span style="white-space: pre-wrap">{{ jsonInfoDataWhat }}
-            </span>
+            <span style="white-space: pre-wrap">{{ jsonInfoDataWhat }} </span>
           </ng-container>
           <ng-container *ngIf="currentWorkflow.options && currentWorkflow.options[0][1]">
             <button
@@ -184,9 +189,6 @@
             <button (click)="fullRestart()" class="btn btn-danger dangerbuttons">
               Restart and Clear Notes
             </button>
-            <button class="btn btn-danger dangerbuttons" (click)="activeModal.close('Close click')">
-              Close
-            </button>
           </ng-container>
         </ng-container>
       </div>
@@ -199,4 +201,3 @@
     <div style="order:3; height:25px"></div>
   </div>
 </div>
-<div class="modal-footer"></div>

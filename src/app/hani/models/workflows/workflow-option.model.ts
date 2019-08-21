@@ -5,5 +5,5 @@ export interface IWorkflowOption extends Object {
   step: StepType
   label: string
   infoData: IWorkflowinfoData
-  options: Array<[string, StepType]>
+  options: Array<[string, StepType, string?]>
 }

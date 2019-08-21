@@ -11,8 +11,7 @@
       <a class="nav-link" [routerLink]="['/hani/reporting']" *ngIf="this.auth.userType < 3"
         >Reporting</a
       >
-      <muse-hani-modal></muse-hani-modal>
-      <!-- <a class="nav-link" [routerLink]="['/hani']">Hani</a> -->
+      <a class="nav-link" [routerLink]="['/hani']">Hani</a>
     </ng-container>
     <a class="nav-link" [routerLink]="['/eva/dmca']" *ngIf="this.auth.userType < 4">Eva</a>
     <a

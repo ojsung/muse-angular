@@ -5,13 +5,12 @@ import { HaniComponent } from './hani.component'
 import { SharedModule } from '../shared/shared.module'
 import { HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-import { HaniModalComponent } from './hani-modal/hani-modal.component'
 import { HaniService } from './hani.service';
 import { HaniReportingComponent } from './hani-reporting/hani-reporting.component';
+import { CherModule } from '../cher/cher.module';
 
 @NgModule({
-  declarations: [HaniComponent, HaniModalComponent, HaniReportingComponent],
+  declarations: [HaniComponent, HaniReportingComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -19,11 +18,8 @@ import { HaniReportingComponent } from './hani-reporting/hani-reporting.componen
     HaniRoutingModule,
     SharedModule,
     HttpClientModule,
-    NgbModule
+    CherModule
   ],
-  exports: [ HaniModalComponent, HaniComponent ],
-  bootstrap: [HaniModalComponent],
-  entryComponents: [HaniComponent],
   providers: [HaniService]
 })
 export class HaniModule {}

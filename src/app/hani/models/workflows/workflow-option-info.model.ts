@@ -6,5 +6,4 @@ export interface IWorkflowinfoData extends Object {
   why: string
   what: string | IQrfTemplate | [string, string]
   disposition: WorkflowDispositionType
-  autoText: string
 }

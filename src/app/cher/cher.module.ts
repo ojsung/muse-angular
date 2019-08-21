@@ -15,5 +15,6 @@ import { HighFormComponent } from './high/high-form/high-form.component'
     FormsModule,
     ReactiveFormsModule,
   ],
+  exports: [DisasterComponent],
 })
 export class CherModule { }
