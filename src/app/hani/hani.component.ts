@@ -10,7 +10,6 @@ import { HaniService } from './hani.service'
 import { IWorkflowTrend } from './models/workflow-trend.model'
 import { WorkflowDispositionType } from './models/workflows/workflow-disposition.model'
 import { Subscription } from 'rxjs'
-import { AuxiliaryWorkflowsService } from './auxiliary-workflows.service';
 
 @Component({
   selector: 'muse-hani',
@@ -361,12 +360,10 @@ export class HaniComponent implements OnInit, OnDestroy {
     this.showTextBox = true
   }
 
-  /* Set the width of the side navigation to 250px */
   public openNav() {
     this.navOpen = true
   }
 
-  /* Set the width of the side navigation to 0 */
   public closeNav() {
     this.navOpen = false
   }
