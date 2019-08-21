@@ -15,8 +15,6 @@
       <!-- <a class="nav-link" [routerLink]="['/hani']">Hani</a> -->
     </ng-container>
     <a class="nav-link" [routerLink]="['/eva/dmca']" *ngIf="this.auth.userType < 4">Eva</a>
-
-
     <a
       *ngIf="!auth.isAuthenticated()"
       class="nav-link"

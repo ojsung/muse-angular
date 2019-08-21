@@ -150,7 +150,6 @@ export class HaniComponent implements OnInit, OnDestroy {
 
   // this will only be called once when the user is selecting which department's workflows to see
   public setDepartment(index) {
-    this.hs.startTime = Date.now()
     this.currentDepartment = this.departments[index]
   }
 
@@ -272,7 +271,6 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   public fullRestart() {
-    this.hs.endTime = Date.now()
     this.sendToServer()
     this.clearDepartmentAndWorkflow()
     this.siForm.reset()
@@ -360,5 +358,4 @@ export class HaniComponent implements OnInit, OnDestroy {
   public openReporting() {
     this.showTextBox = true
   }
-
 }
