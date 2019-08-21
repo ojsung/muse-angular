@@ -1,6 +1,8 @@
 # muse-angular
+My first try learning Angular.  I apologize for any terrible code you find.  I try to refactor the code every time I feel I've learned something important or useful.  But there are still many places where the code is not up-to-standard.
+
 To run Muse's frontend code:
-1. Start cher-node
+1. Start muse-node
 2. npm install
 3. npm start
 This will open Muse on port 3000

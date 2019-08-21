@@ -65,3 +65,34 @@ input {
   box-sizing: border-box;
   width: 100%;
 }
+
+.hider-container {
+  min-width: 100%;
+  min-height: 100%
+}
+
+.greenFocus:focus-within {
+  border: 2px solid green
+}
+
+.hider {
+  box-sizing: 100%;
+  width: 100%;
+}
+
+.hider-container .hider {
+  display: none
+}
+
+.hider-container:focus .hider {
+  display: inline-block
+}
+
+.hider-container:focus-within .hider {
+  display: inline-block
+}
+
+input {
+  box-sizing: border-box;
+  width: 100%;
+}
