@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http'
 import { IWorkflowDepartment } from './models/workflows/workflow-department.model'
 import { tap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
-import { AuxiliaryWorkflowsService } from './auxiliary-workflows.service';
+import { AuxiliaryWorkflowsService } from './auxiliary-workflows.service'
 
 @Injectable()
 export class HaniService extends HttpService implements OnInit, OnDestroy {
@@ -42,7 +42,6 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
 
   public completeWorkflow = this.aws.workflowComplete
   public introWorkflow = this.aws.workflowIntro
-
 
   public compareArrays(array1, array2) {
     return (
@@ -112,16 +111,16 @@ export class HaniService extends HttpService implements OnInit, OnDestroy {
   }
 
   public getWorkflowList(): IWorkflowDepartment[] {
-    let departmentList: IWorkflowDepartment[]
+    const departmentList: IWorkflowDepartment[] = [{department: 'Troubleshooting', workflows: null}]
     this.workflowSubscription = this.getWorkflows().subscribe({
       error: error => {
         console.log(error)
         this.unsubscribeFrom(this.workflowSubscription)
       },
-      next: departments => {
+      next: workflows => {
+        departmentList[0].workflows = workflows
         this.unsubscribeFrom(this.workflowSubscription)
-        this.departments = departments as IWorkflowDepartment[]
-        departmentList = departments
+        this.departments = departmentList as IWorkflowDepartment[]
       }
     })
     return departmentList
