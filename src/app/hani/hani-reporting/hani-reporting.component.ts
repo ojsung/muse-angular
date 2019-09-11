@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { HaniService } from '../hani.service'
 import { Subscription } from 'rxjs'
+import { DomSanitizer } from '@angular/platform-browser'
 
 @Component({
   selector: 'muse-hani-reporting',
@@ -9,7 +10,7 @@ import { Subscription } from 'rxjs'
   providers: [HaniService]
 })
 export class HaniReportingComponent implements OnInit, OnDestroy {
-  constructor(private hs: HaniService) {}
+  constructor(private hs: HaniService, private ds: DomSanitizer) {}
 
   private trendingSubscription: Subscription
 
@@ -18,6 +19,7 @@ export class HaniReportingComponent implements OnInit, OnDestroy {
   public csv = ''
   public touched = false
   public nameInput: string
+  public fileUrl
 
   ngOnInit() {}
 
@@ -38,6 +40,7 @@ export class HaniReportingComponent implements OnInit, OnDestroy {
         this.trendingResults = trendingArray
         console.log(JSON.stringify(trendingArray))
         this.arrayToCSV()
+        this.createDownloadableCSV(this.csv)
       },
       complete: () => {
         this.trendingSubscription.unsubscribe()
@@ -76,6 +79,12 @@ export class HaniReportingComponent implements OnInit, OnDestroy {
         this.csv += '\n\n'
       }
     })
+  }
+
+  private createDownloadableCSV(csv: string) {
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const unsanitizedFileUrl = window.URL.createObjectURL(blob)
+    this.fileUrl = this.ds.bypassSecurityTrustResourceUrl(unsanitizedFileUrl)
   }
 
   public setError() {

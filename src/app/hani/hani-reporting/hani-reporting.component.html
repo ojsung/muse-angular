@@ -12,6 +12,6 @@
       <button class="btn btn-danger" (click)="deliverAsCsv()" *ngIf="!tableState">I Am Sure</button>
     </ng-container>
     <br />
-    <textarea [(ngModel)]="csv" *ngIf="tableState"></textarea>
+    <a download="report.csv" [href]="fileUrl" *ngIf="fileUrl">Download Report</a>
   </div>
 </div>

@@ -40,7 +40,6 @@ export class HaniComponent implements OnInit, OnDestroy {
   private trackingSubscription: Subscription
   private initialWorkflow: string
   public visibleWorkflowCount = 1
-  public showTextBox = false
   public textReport = ''
   public userName = this.hs.auth.firstName
   private get reportToSend() {
@@ -48,6 +47,7 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
   private bugReportSubscription: Subscription
   public navOpen = false
+  public featuresOpen = false
 
   // Depending on what step the T1 is on, infoData may still be undefined.
   // this let's the html know the state of infoData
@@ -346,18 +346,14 @@ export class HaniComponent implements OnInit, OnDestroy {
   }
 
   public reportProblem(reportType) {
-    const currentWfStep = this.currentWorkflow.step
+    const currentWfStep = this.currentWorkflow ? this.currentWorkflow.step : ['not in a workflow', 0, "before discovery"]
     const report = this.reportToSend
     const fullReport = `${reportType}: ${this.currentNav}, ${currentWfStep} - ${report}`
     this.bugReportSubscription = this.hs.postBugs(fullReport).subscribe(() => {
       this.bugReportSubscription.unsubscribe()
-      this.showTextBox = false
+      this.featuresOpen = false
       this.textReport = ''
     })
-  }
-
-  public openReporting() {
-    this.showTextBox = true
   }
 
   public openNav() {
@@ -366,5 +362,13 @@ export class HaniComponent implements OnInit, OnDestroy {
 
   public closeNav() {
     this.navOpen = false
+  }
+
+  public openFeatures() {
+    this.featuresOpen = true
+  }
+
+  public closeFeatures() {
+    this.featuresOpen = false
   }
 }

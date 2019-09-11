@@ -7,7 +7,7 @@ import ipaddr from '../../assets/ipaddr.json'
 
 export class SocketService extends Socket implements OnInit, OnDestroy {
   constructor(protected auth: AuthService) {
-    // super({ url: `http://${ipaddr.ipAddress}/api` })
+    // super({ url: `https://${ipaddr.ipAddress}/api` })
     super({ url: 'http://localhost:4200/api' })
 
     const token = this.auth.token

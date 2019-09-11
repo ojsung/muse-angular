@@ -1,16 +1,34 @@
-<!-- from https://www.w3schools.com/howto/howto_js_sidenav.asp
-        Thank you W3 schools -->
-<div [ngClass]="{'sidenav':true, fullwidth: navOpen}">
+<div class="card-header" style="background-color:rgb(160, 160, 160)">
+  {{ pageTitle }}
+</div>
+<!-- from https://www.w3schools.com/howto/howto_js_sidenav.asp -->
+<div [ngClass]="{ sidenav: true, leftnav:true, fullwidth: navOpen }">
   <i class="closebtn" (click)="closeNav()">&times;</i>
-<muse-disaster></muse-disaster>
+  <muse-disaster></muse-disaster>
 </div>
 
-<!-- Use any element to open the sidenav -->
-<button class="btn btn-info" style="margin:5px 15px" (click)="openNav()">View Cher</button>
-
+<div [ngClass]="{ sidenav: true, rightnav: true, fullwidth: featuresOpen }">
+  <i class="closebtn" (click)="closeFeatures()">&times;</i>
+  <div class="columnflex">
+    <div class="rowflex">
+<button class="btn btn-secondary" (click)="reportProblem('Feature Request')">
+    Requesting a Feature
+  </button>
+  <button class="btn btn-secondary" (click)="reportProblem('Bug Report')">
+    Reporting a Bug
+  </button>
+</div>
+  <textarea
+  style="width: 80%; height: 80%; order: 1"
+  placeholder="Your current location in the workflow is automatically reported"
+  [(ngModel)]="textReport"
+></textarea>
+</div>
+</div>
 
 <div class="haniWindow rowflex">
   <div class="w3-sidebarmod" style="order:0;">
+      <button class="btn btn-secondary" style="margin:5px 15px" (click)="openNav()">View Cher</button>
     <h6>Navigation History</h6>
     <button
       class="btn btn-light"
@@ -31,20 +49,18 @@
     <div *ngIf="!currentNav">No history to display</div>
   </div>
   <div class="w3-sidebarmod" style="order:2;">
-    <div style="height:70%; top: 0;">
+    <div class="rowflex">
+          <button class="btn btn-secondary reportbutton" (click)="openFeatures()">
+            Feature Request / Bug Report
+          </button>
+    </div>
+    <div style="height:60%; top: 0;">
       <form [formGroup]="siForm">
         <div class="sidewrapper">
           <div style="display:inline-block">
             <label for="azotel">Azotel ID:</label>
           </div>
           <input id="azotel" formControlName="azotelId" />
-          <!-- <button
-          class="btn btn-light"
-          (click)="(retrieveAzotel)"
-          style="height: 60%; display: inline-block;"
-        >
-          Retrieve
-        </button> -->
         </div>
         <div class="sidewrapper">
           <label for="apName">AP Name:</label>
@@ -84,44 +100,12 @@
     </div>
   </div>
   <div class="columnflex" style="order: 1; margin: 10px; margin-bottom:25px" style="flex:1">
-    <div class="w3-bar horiznav">
-      <ng-container *ngIf="infoData">
-        <div class="rowflex">
-          <span style="order: 1" *ngIf="!showTextBox">{{ infoData.why }}</span>
-          <textarea
-            *ngIf="showTextBox"
-            style="width: 80%; height: 80%; order: 1"
-            placeholder="Your current location in the workflow is automatically reported"
-            [(ngModel)]="textReport"
-          ></textarea>
-          <ng-container *ngIf="!showTextBox">
-            <button class="btn btn-light reportbutton" (click)="openReporting()">
-              Feature Request/Bug Report
-            </button></ng-container
-          >
-          <ng-container *ngIf="showTextBox" class="reportbutton">
-            <button class="btn btn-light" (click)="reportProblem('Feature Request')">
-              Requesting a Feature
-            </button>
-            <button class="btn btn-light" (click)="reportProblem('Bug Report')">
-              Reporting a Bug
-            </button></ng-container
-          >
-        </div>
-        <a
-          *ngIf="infoData.learnMore && infoData.learnMore.startsWith('http')"
-          href="{{ infoData.learnMore }}"
-          >Learn More</a
-        >
-      </ng-container>
-    </div>
     <form [formGroup]="siForm" style="flex:1">
       <div class="w3-bar enborder" style="position:relative; padding: 5px;height:75%">
         <ng-container *ngIf="hs.aws.index < 3">
           <div class="card-header bg-secondary option-banner">
             <strong>{{ hs.aws.workflowIntro[hs.aws.index].label }}</strong>
           </div>
-          <div>{{ hs.aws.workflowIntro[hs.aws.index].infoData.what }}</div>
           <button
             [disabled]="this.introPass"
             class="btn btn-light btn-select"
@@ -129,6 +113,10 @@
           >
             Continue
           </button>
+          <div class="card-header bg-light why-how-banner"><strong>How Do I Do This?</strong></div>
+          <div style="background-color: lightgray">
+            {{ hs.aws.workflowIntro[hs.aws.index].infoData.what }}
+          </div>
         </ng-container>
         <ng-container *ngIf="!currentDepartment && hs.aws.index == 3">
           <div class="card-header bg-secondary option-banner">
@@ -160,12 +148,8 @@
         </ng-container>
         <ng-container *ngIf="infoData">
           <div class="card-header bg-secondary option-banner">
-            <strong> What to Do: {{ currentWorkflow.label }}</strong>
+            <strong> {{ currentWorkflow.label }}</strong>
           </div>
-          <div style="white-space: pre-line" *ngIf="!infoDataDataType">{{ infoData.what }}</div>
-          <ng-container *ngIf="infoDataDataType">
-            <span style="white-space: pre-wrap">{{ jsonInfoDataWhat }} </span>
-          </ng-container>
           <ng-container *ngIf="currentWorkflow.options && currentWorkflow.options[0][1]">
             <button
               *ngFor="let option of currentWorkflow.options; let i = index"
@@ -190,6 +174,24 @@
               Restart and Clear Notes
             </button>
           </ng-container>
+          <div class="card-header bg-light why-how-banner"><strong>How Do I Do This?</strong></div>
+          <div style="white-space: pre-line; background-color: lightgray" *ngIf="!infoDataDataType">
+            {{ infoData.what }}
+          </div>
+          <ng-container *ngIf="infoDataDataType">
+            <span style="white-space: pre-wrap">{{ jsonInfoDataWhat }} </span>
+          </ng-container>
+          <div *ngIf="infoData.why">
+            <div class="card-header bg-light why-how-banner">
+              <strong>Why Am I Doing This?</strong>
+            </div>
+            <span style="order: 1; background-color: lightgray">{{ infoData.why }}</span>
+          </div>
+          <a
+            *ngIf="infoData.learnMore && infoData.learnMore.startsWith('http')"
+            href="{{ infoData.learnMore }}"
+            >Learn More</a
+          >
         </ng-container>
       </div>
       <textarea

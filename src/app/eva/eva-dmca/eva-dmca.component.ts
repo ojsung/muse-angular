@@ -7,7 +7,7 @@ import { IOffender } from './offender.model'
 @Component({
   selector: 'muse-eva-dmca',
   templateUrl: './eva-dmca.component.html',
-  styleUrls: ['./eva-dmca.component.css']
+  styleUrls: ['./eva-dmca.component.css', '../eva.module.css']
 })
 export class EvaDmcaComponent implements OnInit, OnDestroy {
   constructor(private ess: EvaSocketService, private fb: FormBuilder) { }
@@ -18,6 +18,7 @@ export class EvaDmcaComponent implements OnInit, OnDestroy {
   private currentRow: number
   private focused = false
   public formView = false
+  public pageTitle = 'Eva: DMCA Tracker'
 
   // forms variables
   public dmcaForm: FormGroup

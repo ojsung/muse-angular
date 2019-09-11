@@ -1,0 +1,16 @@
+.hover-row {
+  background-color: rgb(240, 240, 240);
+  transition: 0.2s
+}
+
+.hover-row:hover {
+  background-color: rgb(200, 200, 200);
+}
+
+.hiddentable {
+  height: 0%
+}
+
+.showntable {
+  height: auto;
+}

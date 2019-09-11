@@ -12,8 +12,14 @@
         >Reporting</a
       >
       <a class="nav-link" [routerLink]="['/hani']">Hani</a>
+      <a class="dropdown nav-link" *ngIf="this.auth.userType !== undefined && this.auth.userType < 4">
+        <span class="dropbtn">Eva</span>
+        <div class="dropdown-content">
+          <a class="nav-link" [routerLink]="['/eva/dmca']">DMCA</a>
+          <a class="nav-link" [routerLink]="['/eva/eero']">Eero</a>
+        </div>
+      </a>
     </ng-container>
-    <a class="nav-link" [routerLink]="['/eva/dmca']" *ngIf="this.auth.userType < 4">Eva</a>
     <a
       *ngIf="!auth.isAuthenticated()"
       class="nav-link"
@@ -29,5 +35,4 @@
       [routerLink]="['user/login']"
       >Logout</a
     >
-  </div>
 </nav>
