@@ -11,6 +11,7 @@
 }
 
 
+
 .enborder {
   border: 1px solid #ECF0F1;
 }
@@ -34,4 +35,82 @@ muse-hani {
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto
+}
+
+
+/* The side navigation menu */
+.sidenav {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  background-color: rgb(255, 255, 255);
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.3s; /* 0.5 second transition effect to slide in the sidenav */
+}
+.leftnav {
+  height: 100%; /* 100% Full-height */
+  top: 0; /* Stay at the top */
+  left: 0;
+  width: 0; /* 0 width - change this with JavaScript */
+  padding-top: 60px; /* Place content 60px from the top */
+}
+
+.rightnav {
+  height: 100%; /* 100% Full-height */
+  top: 0; /* Stay at the top */
+  right: 0;
+  width: 0; /* 0 width - change this with JavaScript */
+  padding-top: 60px; /* Place content 60px from the top */
+}
+
+.topnav {
+  height: 0%;
+  margin-top: 0;
+  left: 0;
+  width: 100%;
+  padding-top: 0px; /* Place content 60px from the top */
+}
+
+.bottomnav {
+  height: 0%;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 0px; /* Place content 60px from the top */
+}
+
+/* The navigation menu links */
+.sidenav button {
+  transition: 0.3s;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  color:gray;
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+.closebtn:hover {
+  cursor: pointer;
+}
+
+.fullwidth {
+  width:100%
+}
+
+.fullheight{
+  height: 100%;
+  padding-top: 60px; /* Place content 60px from the top */
+}
+.bottomheight{
+  height: 30%;
+  padding-bottom: 60px
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav button {font-size: 18px;}
 }

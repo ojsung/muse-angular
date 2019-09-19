@@ -13,12 +13,17 @@ export class EvaHttpService extends HttpService {
   constructor(protected http: HttpClient, public auth: AuthService) {
     super(http, auth)
   }
-  private eeroUrl = 'eero/speedtest'
+  private speedtestUrl = 'eero/speedtest'
+  private networkUrl = 'eero'
   public getSpeedtests(): Observable<ISpeedtestContainer[]> {
-    return this.getEntry(this.eeroUrl)
+    return this.getEntry(this.speedtestUrl)
   }
 
   public runSpeedtest(): Observable<ISpeedtestContainer> {
-    return this.postEntry(this.eeroUrl, null)
+    return this.postEntry(this.speedtestUrl, null)
+  }
+
+  public updateNetwork(update: any): Observable<any> {
+    return this.putEntry(this.networkUrl, update)
   }
 }

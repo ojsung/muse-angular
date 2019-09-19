@@ -1,41 +1,73 @@
-<div class="card-header" style="background-color:rgba(39, 194, 0, 0.548)">
-  {{ pageTitle }}
-  <button
-  class="card"
-  style="background-color: rgb(255, 255, 255); float: right; margin: 2px; padding: 3px;"
-  (click) = "runSpeedtest()"
-  [disabled]="runningTest"
->{{runningTest ? "Running Test" : "Run a Test"}}</button>
-  <div
-    class="card"
-    style="background-color: rgb(255, 255, 255); float: right; margin: 2px; padding: 3px;"
+<div
+  class="card-header"
+  style="background-color:rgba(39, 194, 0, 0.548);"
+>
+  <span>
+    {{ pageTitle }}
+  </span>
+</div>
+<div
+  class="card-header"
+  style="background-color:rgba(236, 236, 236, 0.548); display: flex; justify-content: flex-start"
+>
+  <span style="align-self: center; justify-self: flex-start"
+    >Showing {{ showSlice }} Results</span
   >
-    <a *ngIf="fileUrl" [href]="fileUrl" download="Speedtest Results.csv">Download as CSV</a>
+  <button
+    (click)="increaseShowSlice()"
+    class="btn btn-secondary"
+    style="margin: auto 3px; padding: 3px; justify-self: flex-start"
+  >
+    Show 5 More
+  </button>
+  <button class="btn btn-secondary" style="margin-left: auto; margin-right: 3px; padding: 3px" (click)="showForm()">
+  Add/Update Network
+  </button>
+  <div
+  class="fakebutton"
+  >
+    <a *ngIf="fileUrl" [href]="fileUrl" download="Speedtest Results.csv" style="color: white">Download as CSV</a>
   </div>
+</div>
+<div [ngClass]="{ sidenav: true, rightnav:true, rightthirty: formShowing }">
+  <i class="closebtn" (click)="showForm()">&times;</i>
+  <muse-network-form></muse-network-form>
 </div>
 <div class="card">
   <ul class="list-group list-group-flush">
     <li
       class="list-group-item hover-row"
-      *ngFor="let row of rows; let i = index"
+      *ngFor="let row of rows | slice: 0:showSlice; let i = index"
     >
       {{ row.date | date: 'medium' }}
-      <button class="btn btn-light" (click)="setShowingTable(i)">{{showTable === i ? "Hide" : "Show"}}</button>
+      <button class="btn btn-light" (click)="setShowingTable(i)">
+        {{ showTable === i ? 'Hide' : 'Show' }}
+      </button>
       <div
         class="card"
         [ngStyle]="{ height: showTable === i ? 'auto' : '0%' }"
         *ngIf="showTable === i"
       >
-      <div>FAILED TESTS: {{row.failed.length ? row.failed : "None"}}</div>
-        <ngx-datatable [columns]="columns" [rows]="row.results" [scrollbarV]="true" [sortType] = "SortType.multi">
-          <ngx-datatable-column name="Owner" width="150"></ngx-datatable-column>
-          <ngx-datatable-column name="Network ID" prop="network id" width="150"></ngx-datatable-column>
-          <ngx-datatable-column name="Date" prop="speed.date" width="300"></ngx-datatable-column>
-          <ngx-datatable-column name="Down Value" prop="speed.down.value" width="100"></ngx-datatable-column>
-          <ngx-datatable-column name="Down Units" prop="speed.down.units" width="100"></ngx-datatable-column>
-          <ngx-datatable-column name="Up Value" prop="speed.up.value" width="100"></ngx-datatable-column>
-          <ngx-datatable-column name="Up Units" prop="speed.up.units" width="100"></ngx-datatable-column>
-        </ngx-datatable>
+        <div [ngStyle]="{ color: row.failed.length ? 'red' : 'black' }">
+          <strong>FAILED TESTS:</strong>
+          <!-- <span *ngFor="let failure of row.failed">{{failure.networkId ? failure.networkId : failure}} </span> -->
+          <ngx-datatable
+            [columns]="failedColumns"
+            [rows]="row.failed"
+            [scrollbarV]="true"
+            [sortType]="SortType.multi"
+          ></ngx-datatable>
+        </div>
+        <div>
+          <span style="color:rgba(27, 136, 0, 0.644)"><strong>Results:</strong></span>
+          <ngx-datatable
+            [columns]="columns"
+            [rows]="row.results"
+            [scrollbarV]="true"
+            [sortType]="SortType.multi"
+          >
+          </ngx-datatable>
+        </div>
       </div>
     </li>
   </ul>

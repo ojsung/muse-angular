@@ -1,0 +1,65 @@
+<div class="card">
+  <div class="card-body">
+    <form novalidate (ngSubmit)="save()" [formGroup]="networkForm">
+      <label for="owner">Owner</label>
+      <input
+        class="form-control"
+        id="owner"
+        type="text"
+        placeholder="John Doe"
+        formControlName="owner"
+      />
+      <label for="networkId">Network ID</label>
+      <input
+        class="form-control"
+        id="networkId"
+        type="text"
+        placeholder="123456"
+        formControlName="networkId"
+      />
+      <label for="internalId">Internal ID</label>
+      <input
+        class="form-control"
+        id="internalId"
+        type="text"
+        placeholder="12345678"
+        formControlName="internalId"
+      />
+      <label for="eeroSN">Eero Serial Number</label>
+      <input
+        class="form-control"
+        id="eeroSN"
+        type="text"
+        placeholder="G***************"
+        formControlName="eeroSN"
+      />
+      <label for="device">Device</label>
+      <input
+        class="form-control"
+        id="device"
+        type="text"
+        placeholder="Pandora"
+        formControlName="device"
+      />
+      <label for="tower">Tower</label>
+      <input
+        class="form-control"
+        id="tower"
+        type="text"
+        placeholder="UT.LEH.T0001"
+        formControlName="tower"
+      />
+      <button
+        class="btn btn-primary mr-3"
+        type="submit"
+        style="width:80px; margin: 5px"
+        [title]="
+          networkForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'
+        "
+        [disabled]="!networkForm.valid"
+      >
+        Save
+      </button>
+    </form>
+  </div>
+</div>

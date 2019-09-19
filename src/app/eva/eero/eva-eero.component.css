@@ -1,6 +1,5 @@
 .hover-row {
   background-color: rgb(240, 240, 240);
-  transition: 0.2s
 }
 
 .hover-row:hover {
@@ -14,3 +13,20 @@
 .showntable {
   height: auto;
 }
+
+.fakebutton {
+  color: white;
+  transition: .15s;
+  background-color: #6c757d;
+  margin: auto 3px;
+  padding: 3px;
+  border-radius:.25rem;
+  }
+
+  .fakebutton:hover {
+    background-color: #586066;
+  }
+
+  .rightthirty {
+    width: 30%;
+  }

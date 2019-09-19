@@ -1,16 +1,16 @@
-export interface ISpeedtest {
-  owner: string,
+import { ISpeedtestFail } from './speedtest-fails'
+
+export interface ISpeedtest extends ISpeedtestFail {
   speed: {
-    status: string,
-    date: Date,
+    status: string
+    date: Date
     up: {
-      value: number,
-      units: string
-    },
-    down: {
-      value: number,
+      value: number
       units: string
     }
-  },
-  "network id": number
+    down: {
+      value: number
+      units: string
+    }
+  }
 }
